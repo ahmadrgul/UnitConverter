@@ -41,21 +41,11 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.unitconverter.domain.MeasurementCategory
+import com.example.unitconverter.domain.MeasurementRegistry
 import com.example.unitconverter.generated.resources.Res
-import com.example.unitconverter.generated.resources.area_icon
-import com.example.unitconverter.generated.resources.clock_icon
-import com.example.unitconverter.generated.resources.flash_icon
-import com.example.unitconverter.generated.resources.jar_icon
-import com.example.unitconverter.generated.resources.power_icon
-import com.example.unitconverter.generated.resources.pressure_icon
-import com.example.unitconverter.generated.resources.ruler_icon
 import com.example.unitconverter.generated.resources.search_icon
-import com.example.unitconverter.generated.resources.speed_icon
-import com.example.unitconverter.generated.resources.thermostat_icon
-import com.example.unitconverter.generated.resources.weight_icon
-import com.example.unitconverter.generated.resources.wrench_icon
 import com.example.unitconverter.navigation.Calculator
-import com.example.unitconverter.navigation.Measurement
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -87,12 +77,12 @@ fun HomeScreen(navController: NavController) {
                     SectionHeading("Everyday Measurements")
                 }
 
-                items(measurements) { item ->
+                items(MeasurementRegistry.groupedMeasurements[MeasurementCategory.GENERAL] ?: emptyList()) { item ->
                     MeasurementCardItem(
                         label = item.label,
                         icon = item.icon,
                         color = item.color,
-                        onClick = { navController.navigate(Calculator(item.route))}
+                        onClick = { navController.navigate(Calculator(item.routeId))}
                     )
                 }
 
@@ -104,12 +94,12 @@ fun HomeScreen(navController: NavController) {
                     SectionHeading("Mechanical Units")
                 }
 
-                items(mechanicalUnits) { item ->
+                items(MeasurementRegistry.groupedMeasurements[MeasurementCategory.MECHANICAL] ?: emptyList()) { item ->
                     MeasurementCardItem(
                         label = item.label,
                         icon = item.icon,
                         color = item.color,
-                        onClick = { navController.navigate(Calculator(item.route)) }
+                        onClick = { navController.navigate(Calculator(item.routeId)) }
                     )
                 }
             }
@@ -269,22 +259,22 @@ data class MeasurementCard(
     val label: String,
     val icon: DrawableResource,
     val color: Color,
-    val route: Measurement
+    val route: String
 )
 
-val measurements = listOf(
-    MeasurementCard("Length", Res.drawable.ruler_icon, Color(0xFF1FA971), route = Measurement.LENGTH),
-    MeasurementCard("Area", Res.drawable.area_icon, Color(0xFF4C6FFF), Measurement.AREA),
-    MeasurementCard("Time", Res.drawable.clock_icon, Color(0xFF8B5CF6), Measurement.TIME),
-    MeasurementCard("Volume", Res.drawable.jar_icon, Color(0xFFF5941D), Measurement.VOLUME),
-    MeasurementCard("Temperature", Res.drawable.thermostat_icon, Color(0xFFF0454F), Measurement.TEMPERATURE),
-    MeasurementCard("Weight", Res.drawable.weight_icon, Color(0xFF14B8A6), Measurement.WEIGHT),
-    MeasurementCard("Speed", Res.drawable.speed_icon, Color(0xFF2F80ED), Measurement.SPEED),
-    MeasurementCard("Energy", Res.drawable.flash_icon, Color(0xFFFF9F1C), Measurement.ENERGY)
-)
-
-val mechanicalUnits = listOf(
-    MeasurementCard("Power", Res.drawable.power_icon, Color(0xFF8B5CF6), Measurement.POWER),
-    MeasurementCard("Torque", Res.drawable.wrench_icon, Color(0xFF34A853), Measurement.TORQUE),
-    MeasurementCard("Pressure", Res.drawable.pressure_icon, Color(0xFFF5941D), Measurement.PRESSURE),
-)
+//val measurements = listOf(
+//    MeasurementCard("Length", Res.drawable.ruler_icon, Color(0xFF1FA971), route = Measurement.LENGTH),
+//    MeasurementCard("Area", Res.drawable.area_icon, Color(0xFF4C6FFF), Measurement.AREA),
+//    MeasurementCard("Time", Res.drawable.clock_icon, Color(0xFF8B5CF6), Measurement.TIME),
+//    MeasurementCard("Volume", Res.drawable.jar_icon, Color(0xFFF5941D), Measurement.VOLUME),
+//    MeasurementCard("Temperature", Res.drawable.thermostat_icon, Color(0xFFF0454F), Measurement.TEMPERATURE),
+//    MeasurementCard("Weight", Res.drawable.weight_icon, Color(0xFF14B8A6), Measurement.WEIGHT),
+//    MeasurementCard("Speed", Res.drawable.speed_icon, Color(0xFF2F80ED), Measurement.SPEED),
+//    MeasurementCard("Energy", Res.drawable.flash_icon, Color(0xFFFF9F1C), Measurement.ENERGY)
+//)
+//
+//val mechanicalUnits = listOf(
+//    MeasurementCard("Power", Res.drawable.power_icon, Color(0xFF8B5CF6), Measurement.POWER),
+//    MeasurementCard("Torque", Res.drawable.wrench_icon, Color(0xFF34A853), Measurement.TORQUE),
+//    MeasurementCard("Pressure", Res.drawable.pressure_icon, Color(0xFFF5941D), Measurement.PRESSURE),
+//)

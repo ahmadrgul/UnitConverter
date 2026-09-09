@@ -38,7 +38,7 @@ fun appTypography(): Typography {
     }
 }
 
-val PrimaryLight = Color(0xFF2F6FED)
+val PrimaryLight = Color(0xFF0d8ff9)
 val BgAppLight = Color(0xFFfafcff)
 val SurfaceLight = Color(0xFFFFFFFF)
 val TextPrimaryLight = Color(0xFF14161F)

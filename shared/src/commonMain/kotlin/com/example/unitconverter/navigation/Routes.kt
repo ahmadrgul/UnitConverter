@@ -14,19 +14,4 @@ object History: BottomBarRoute
 object Settings: BottomBarRoute
 
 @Serializable
-enum class Measurement {
-    LENGTH,
-    AREA,
-    TIME,
-    VOLUME,
-    TEMPERATURE,
-    WEIGHT,
-    SPEED,
-    ENERGY,
-    POWER,
-    TORQUE,
-    PRESSURE,
-}
-
-@Serializable
-data class Calculator (val measurement: Measurement)
+data class Calculator (val routeId: String)

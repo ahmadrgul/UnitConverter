@@ -47,7 +47,11 @@ class ConverterViewModel(
         val textInput = currentState.inputValue
 
         if (textInput.isBlank()) {
-            _state.update { it.copy(convertedValue = "") }
+            _state.update { it.copy(
+                convertedValue = "",
+                approximateConvertedValue = "",
+                approximateInputValue = ""
+            ) }
             return
         }
 

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.selects.select
 import kotlin.math.round
 
 class ConverterViewModel(
@@ -39,6 +40,19 @@ class ConverterViewModel(
 
     fun onToUnitChange(newToUnit: QuantityUnit) {
         _state.update { it.copy(selectedToUnit = newToUnit) }
+        updateState()
+    }
+
+    fun onUnitsSwap() {
+        val prevToUnit = _state.value.selectedToUnit
+        val prevToValue = _state.value.convertedValue
+
+        _state.update { it.copy(selectedToUnit = _state.value.selectedFromUnit) }
+        _state.update { it.copy(selectedFromUnit = prevToUnit)}
+
+        _state.update { it.copy(convertedValue = _state.value.inputValue)}
+        _state.update { it.copy(inputValue = prevToValue) }
+
         updateState()
     }
 

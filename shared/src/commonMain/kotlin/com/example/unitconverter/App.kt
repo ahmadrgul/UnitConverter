@@ -6,20 +6,23 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.unitconverter.home.HomeScreen
-import com.example.unitconverter.navigation.AppNavigation
-import com.example.unitconverter.theme.UnitConverterTheme
+import com.example.unitconverter.di.appModule
+import com.example.unitconverter.presentation.navigation.AppNavigation
+import com.example.unitconverter.presentation.theme.UnitConverterTheme
+import org.koin.compose.KoinApplication
+import org.koin.dsl.koinConfiguration
 
 @Composable
 @Preview
 fun App() {
-    UnitConverterTheme {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            AppNavigation()
+    KoinApplication(configuration = koinConfiguration(declaration = { modules(appModule) })) {
+        UnitConverterTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                AppNavigation()
+            }
         }
     }
 }

@@ -54,9 +54,9 @@ fun ConversionCard(
         modifier = Modifier
             .dropShadow(
                 shadow = Shadow(
-                    color = Color.LightGray.copy(alpha = 0.1f),
-                    radius = 20.dp,
-                    spread = 6.dp,
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 8.dp,
+                    spread = 2.dp,
                     offset = DpOffset(0.dp, 0.dp)
                 ),
                 shape = cardShape

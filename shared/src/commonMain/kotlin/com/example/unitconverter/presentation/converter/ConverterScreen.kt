@@ -152,9 +152,9 @@ fun ConverterScreen(
                         .dropShadow(
                             shape = CircleShape,
                             shadow = Shadow(
-                                color = Color.LightGray.copy(alpha = 0.1f),
-                                radius = 2.dp,
-                                spread = 2.dp,
+                                color = Color.Black.copy(alpha = 0.05f),
+                                radius = 6.dp,
+                                spread = 1.dp,
                                 offset = DpOffset(0.dp, 0.dp)
                             ),
                         )

@@ -1,4 +1,4 @@
-package com.example.unitconverter.theme
+package com.example.unitconverter.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -25,15 +25,43 @@ fun appTypography(): Typography {
         Font(Res.font.inter_semibold, FontWeight.SemiBold),
         Font(Res.font.inter_bold, FontWeight.Bold),
     )
-    return remember(inter){
+    return remember(inter) {
         Typography(
-            displayLarge = TextStyle(fontFamily = inter, fontSize = 30.sp, fontWeight = FontWeight.Bold),
-            headlineLarge = TextStyle(fontFamily = inter, fontSize = 22.sp, fontWeight = FontWeight.Bold),
-            titleLarge = TextStyle(fontFamily = inter, fontSize = 16.sp, fontWeight = FontWeight.SemiBold),
-            bodyLarge = TextStyle(fontFamily = inter, fontSize = 16.sp, fontWeight = FontWeight.Normal),
-            bodyMedium = TextStyle(fontFamily = inter, fontSize = 14.sp, fontWeight = FontWeight.Normal),
-            labelLarge = TextStyle(fontFamily = inter, fontSize = 14.sp, fontWeight = FontWeight.Medium),
-            labelSmall = TextStyle(fontFamily = inter, fontSize = 12.sp, fontWeight = FontWeight.Normal),
+            displayLarge = TextStyle(
+                fontFamily = inter,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            headlineLarge = TextStyle(
+                fontFamily = inter,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            titleLarge = TextStyle(
+                fontFamily = inter,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            ),
+            bodyLarge = TextStyle(
+                fontFamily = inter,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal
+            ),
+            bodyMedium = TextStyle(
+                fontFamily = inter,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal
+            ),
+            labelLarge = TextStyle(
+                fontFamily = inter,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            ),
+            labelSmall = TextStyle(
+                fontFamily = inter,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal
+            ),
         )
     }
 }
@@ -53,7 +81,7 @@ private val LightColors = lightColorScheme(
 
 @Composable
 fun UnitConverterTheme(content: @Composable () -> Unit) {
-    MaterialTheme (
+    MaterialTheme(
         colorScheme = LightColors,
         typography = appTypography(),
         content = content

@@ -55,7 +55,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+
+            implementation("io.insert-koin:koin-core:4.2.2")
+            implementation("io.insert-koin:koin-compose-viewmodel:4.2.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

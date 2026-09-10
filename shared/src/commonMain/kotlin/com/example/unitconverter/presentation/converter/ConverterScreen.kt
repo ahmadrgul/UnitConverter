@@ -1,5 +1,7 @@
 package com.example.unitconverter.presentation.converter
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
@@ -142,32 +145,10 @@ fun ConverterScreen(
                     }
                 }
 
-                IconButton(
-                    onClick = onUnitsSwap,
-                    shape = CircleShape,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    ),
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(24.dp)
-                        .size(50.dp)
-                        .dropShadow(
-                            shape = CircleShape,
-                            shadow = Shadow(
-                                color = Color.Black.copy(alpha = 0.05f),
-                                radius = 6.dp,
-                                spread = 1.dp,
-                                offset = DpOffset(0.dp, 0.dp)
-                            ),
-                        )
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.swap_icon),
-                        contentDescription = "Arrow Up Down",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+                SwapButton(
+                    onSwap = onUnitsSwap,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
 
             CopyResultButton(
@@ -190,6 +171,54 @@ fun ConverterScreen(
             selectedUnit = state.selectedToUnit,
             setSelectedUnit = { onToUnitChange(it) },
             hideSheet = { showOutputUnitSheet = false }
+        )
+    }
+}
+
+
+@Composable
+fun SwapButton(
+    modifier: Modifier = Modifier,
+    onSwap: () -> Unit,
+){
+    var isFlipped by remember { mutableStateOf(false) }
+
+    val rotation by animateFloatAsState(
+        targetValue = if (isFlipped) 180f else 0f,
+        animationSpec = tween(durationMillis = 300),
+    )
+
+    IconButton(
+        onClick = {
+            onSwap()
+            isFlipped = !isFlipped
+        },
+        shape = CircleShape,
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        modifier = modifier
+            .padding(24.dp)
+            .size(50.dp)
+            .dropShadow(
+                shape = CircleShape,
+                shadow = Shadow(
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 6.dp,
+                    spread = 1.dp,
+                    offset = DpOffset(0.dp, 0.dp)
+                ),
+            )
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.swap_icon),
+            contentDescription = "Arrow Up Down",
+            modifier = Modifier
+                .size(24.dp)
+                .graphicsLayer{
+                    rotationX = rotation
+                    cameraDistance = 8 * density
+                }
         )
     }
 }

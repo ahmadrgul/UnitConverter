@@ -1,6 +1,7 @@
 package com.example.unitconverter.presentation.converter
 
 import androidx.lifecycle.ViewModel
+import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.domain.model.QuantityRegistry
 import com.example.unitconverter.domain.model.unit.QuantityUnit
 import com.example.unitconverter.domain.usecase.ConvertUnitUseCase
@@ -13,7 +14,8 @@ import kotlin.math.round
 
 class ConverterViewModel(
     quantityId: String,
-    private val convertUnit: ConvertUnitUseCase
+    private val convertUnit: ConvertUnitUseCase,
+    private val clipboardService: ClipboardService
 ) : ViewModel() {
     private val quantity = QuantityRegistry.getQuantityById(quantityId)
         ?: throw IllegalArgumentException("Unknown quantity ID: '$quantityId'")
@@ -54,6 +56,10 @@ class ConverterViewModel(
         _state.update { it.copy(inputValue = prevToValue) }
 
         updateState()
+    }
+
+    fun onCopyResults() {
+        clipboardService.copyToClipboard("${_state.value.convertedValue} ${_state.value.selectedToUnit.symbol}")
     }
 
     private fun updateState() {

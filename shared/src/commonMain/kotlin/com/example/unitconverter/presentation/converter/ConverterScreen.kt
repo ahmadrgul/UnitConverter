@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.domain.model.unit.QuantityUnit
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.swap_icon
@@ -54,6 +55,7 @@ fun ConverterRoute(
         onFromUnitChange = { viewModel.onFromUnitChange(it) },
         onToUnitChange = { viewModel.onToUnitChange(it) },
         onUnitsSwap = { viewModel.onUnitsSwap() },
+        onCopyResults = { viewModel.onCopyResults() },
         onNavigateBack = onNavigateBack
     )
 }
@@ -65,6 +67,7 @@ fun ConverterScreen(
     onFromUnitChange: (QuantityUnit) -> Unit,
     onToUnitChange: (QuantityUnit) -> Unit,
     onUnitsSwap: () -> Unit,
+    onCopyResults: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     var showInputUnitSheet by remember { mutableStateOf(false) }
@@ -83,7 +86,7 @@ fun ConverterScreen(
                 .padding(top = innerPadding.calculateTopPadding())
                 .padding(16.dp)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
             Box {
@@ -168,7 +171,8 @@ fun ConverterScreen(
             }
 
             CopyResultButton(
-                result = state.convertedValue
+                result = state.convertedValue,
+                onCopyResults = onCopyResults,
             )
         }
 

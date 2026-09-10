@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,6 +78,7 @@ fun ConverterScreen(
                 value = state.inputValue,
                 approximateValue = state.approximateInputValue,
                 editable = true,
+                color = Color.Black,
                 unit = state.selectedFromUnit,
                 onUnitClick = { showInputUnitSheet = true },
                 onValueChange = onInputValueChanged,
@@ -84,11 +86,11 @@ fun ConverterScreen(
                 Box(contentAlignment = Alignment.CenterStart) {
                     if (state.inputValue.isEmpty()) {
                         Text(
-                            text = "Enter value",
+                            text = "Enter Value",
                             color = Color.LightGray,
                             maxLines = 1,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Medium,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                     innerTextField()
@@ -100,25 +102,28 @@ fun ConverterScreen(
                 value = state.convertedValue,
                 approximateValue = state.approximateConvertedValue,
                 editable = false,
+                color = MaterialTheme.colorScheme.primary,
                 unit = state.selectedToUnit,
                 onUnitClick = { showOutputUnitSheet = true },
                 onValueChange = {},
             ) { innerTextField ->
                 Box(contentAlignment = Alignment.CenterStart) {
-                    if (state.inputValue.isEmpty()) {
+                    if (state.convertedValue.isEmpty()) {
                         Text(
                             text = "–",
                             color = Color.LightGray,
                             maxLines = 1,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                     innerTextField()
                 }
             }
 
-            CopyResultButton()
+            CopyResultButton(
+                result = state.convertedValue
+            )
         }
 
         UnitsBottomSheet(

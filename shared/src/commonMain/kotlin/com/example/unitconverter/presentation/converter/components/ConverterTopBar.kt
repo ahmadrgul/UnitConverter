@@ -31,32 +31,35 @@ fun ConverterTopBar(
                 text = title,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
         },
         navigationIcon = {
             IconButton(
                 onClick = onNavigateBack,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(28.dp)
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.chevron_left_icon),
                     contentDescription = "Chevron Left",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = {}) {
-                Icon(
-                    painter = painterResource(Res.drawable.heart_icon),
-                    contentDescription = "Heart",
                     modifier = Modifier.size(28.dp)
                 )
             }
         },
+        actions = {
+            IconButton(
+                onClick = {},
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.heart_icon),
+                    contentDescription = "Heart",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-        modifier = Modifier.padding(horizontal = 8.dp)
+        modifier = Modifier.padding(horizontal = 10.dp)
     )
 }

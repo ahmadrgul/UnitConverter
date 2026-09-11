@@ -46,7 +46,7 @@ fun HomeScreenSearchBar(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.LightGray,
             unfocusedPlaceholderColor = Color.Gray,
             focusedPlaceholderColor = Color.Gray,
         ),
@@ -61,8 +61,8 @@ fun HomeScreenSearchBar(
                 shape = textFieldShape,
                 shadow = Shadow(
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    radius = 4.dp,
-                    spread = 2.dp,
+                    radius = 8.dp,
+                    spread = 0.dp,
                     offset = DpOffset(0.dp, 0.dp)
                 )
             )

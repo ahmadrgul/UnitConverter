@@ -14,6 +14,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.math.round
 
+enum class KeyboardKey(val symbol: String) {
+    NUM_0("0"), NUM_1("1"), NUM_2("2"),
+    NUM_3("3"), NUM_4("4"), NUM_5("5"),
+    NUM_6("6"), NUM_7("7"), NUM_8("8"),
+    NUM_9("9"),
+    BACKSPACE("⌫"),
+    DOT("."),
+    AC("AC"),
+    EQUAL("="),
+}
+
 class ConverterViewModel(
     quantityId: String,
     private val convertUnit: ConvertUnitUseCase,
@@ -43,19 +54,55 @@ class ConverterViewModel(
         }
     }
 
-    fun onInputValueChange(newValue: String) {
-        _state.update { it.copy(inputValue = newValue) }
-        updateState()
+    private fun removeLastCharacter() {
+        _state.update { it.copy(inputValue = _state.value.inputValue.dropLast(1)) }
+    }
+
+    private fun clearAll() {
+        _state.update {
+            it.copy(
+                inputValue = "",
+                convertedValue = "",
+                approximateInputValue = "",
+                approximateConvertedValue = ""
+            )
+        }
+    }
+
+    private fun appendDot() {
+        if (_state.value.inputValue.contains(".")) return
+
+        if (_state.value.inputValue.isEmpty()) {
+            _state.update { it.copy(inputValue = _state.value.inputValue.plus("0.")) }
+            return
+        }
+
+        _state.update { it.copy(inputValue = _state.value.inputValue.plus(".")) }
+    }
+
+    private fun appendNumber(key: KeyboardKey) {
+        if (key == KeyboardKey.NUM_0 && _state.value.inputValue == "0") return
+        _state.update { it.copy(inputValue = _state.value.inputValue.plus(key.symbol)) }
+    }
+
+    fun onKeyPressed(key: KeyboardKey) {
+        when (key) {
+            KeyboardKey.BACKSPACE -> removeLastCharacter()
+            KeyboardKey.AC -> clearAll()
+            KeyboardKey.DOT -> appendDot()
+            KeyboardKey.EQUAL -> performConversion()
+            else -> appendNumber(key)
+        }
     }
 
     fun onFromUnitChange(newFromUnit: QuantityUnit) {
         _state.update { it.copy(selectedFromUnit = newFromUnit) }
-        updateState()
+        performConversion()
     }
 
     fun onToUnitChange(newToUnit: QuantityUnit) {
         _state.update { it.copy(selectedToUnit = newToUnit) }
-        updateState()
+        performConversion()
     }
 
     fun onUnitsSwap() {
@@ -68,7 +115,7 @@ class ConverterViewModel(
         _state.update { it.copy(convertedValue = _state.value.inputValue) }
         _state.update { it.copy(inputValue = prevToValue) }
 
-        updateState()
+        performConversion()
     }
 
     fun onCopyResults() {
@@ -81,7 +128,7 @@ class ConverterViewModel(
         }
     }
 
-    private fun updateState() {
+    private fun performConversion() {
         val currentState = _state.value
         val textInput = currentState.inputValue
 

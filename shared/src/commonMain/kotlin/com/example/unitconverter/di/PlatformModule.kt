@@ -3,8 +3,8 @@ package com.example.unitconverter.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import org.koin.core.module.Module
 import okio.Path.Companion.toPath
+import org.koin.core.module.Module
 
 expect val platformModule: Module
 

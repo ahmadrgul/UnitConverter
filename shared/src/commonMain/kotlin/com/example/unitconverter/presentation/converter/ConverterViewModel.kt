@@ -63,9 +63,9 @@ class ConverterViewModel(
         val prevToValue = _state.value.convertedValue
 
         _state.update { it.copy(selectedToUnit = _state.value.selectedFromUnit) }
-        _state.update { it.copy(selectedFromUnit = prevToUnit)}
+        _state.update { it.copy(selectedFromUnit = prevToUnit) }
 
-        _state.update { it.copy(convertedValue = _state.value.inputValue)}
+        _state.update { it.copy(convertedValue = _state.value.inputValue) }
         _state.update { it.copy(inputValue = prevToValue) }
 
         updateState()
@@ -86,11 +86,13 @@ class ConverterViewModel(
         val textInput = currentState.inputValue
 
         if (textInput.isBlank()) {
-            _state.update { it.copy(
-                convertedValue = "",
-                approximateConvertedValue = "",
-                approximateInputValue = ""
-            ) }
+            _state.update {
+                it.copy(
+                    convertedValue = "",
+                    approximateConvertedValue = "",
+                    approximateInputValue = ""
+                )
+            }
             return
         }
 

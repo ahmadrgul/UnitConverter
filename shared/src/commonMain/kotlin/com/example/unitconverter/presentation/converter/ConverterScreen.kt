@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.domain.model.unit.QuantityUnit
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.swap_icon
@@ -97,7 +96,7 @@ fun ConverterScreen(
         ) {
 
             Box {
-                Column (
+                Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     ConversionCard(
@@ -184,7 +183,7 @@ fun ConverterScreen(
 fun SwapButton(
     modifier: Modifier = Modifier,
     onSwap: () -> Unit,
-){
+) {
     var isFlipped by remember { mutableStateOf(false) }
 
     val rotation by animateFloatAsState(
@@ -219,7 +218,7 @@ fun SwapButton(
             contentDescription = "Arrow Up Down",
             modifier = Modifier
                 .size(24.dp)
-                .graphicsLayer{
+                .graphicsLayer {
                     rotationX = rotation
                     cameraDistance = 8 * density
                 }

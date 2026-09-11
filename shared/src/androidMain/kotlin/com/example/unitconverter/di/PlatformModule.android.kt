@@ -11,7 +11,7 @@ import org.koin.dsl.module
 actual val platformModule: Module = module {
     single<ClipboardService> { AndroidClipboardService(context = get()) }
 
-    single<DataStore<Preferences>>  {
+    single<DataStore<Preferences>> {
         val context: Context = get()
         createDataStore(
             producePath = { context.filesDir.resolve("settings.preferences_pb").absolutePath }

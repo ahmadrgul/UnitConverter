@@ -40,21 +40,22 @@ import org.jetbrains.compose.resources.painterResource
 fun ConversionCard(
     label: String,
     value: String,
+    unit: QuantityUnit,
     approximateValue: String,
     editable: Boolean,
+    color: Color,
     onValueChange: (String) -> Unit,
-    unit: QuantityUnit,
     onUnitClick: () -> Unit,
     decorationBox: @Composable (@Composable () -> Unit) -> Unit,
 ) {
-    val cardShape = RoundedCornerShape(24.dp)
+    val cardShape = RoundedCornerShape(20.dp)
 
     Column(
         modifier = Modifier
             .dropShadow(
                 shadow = Shadow(
-                    color = Color.LightGray.copy(alpha = 0.4f),
-                    radius = 6.dp,
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 8.dp,
                     spread = 2.dp,
                     offset = DpOffset(0.dp, 0.dp)
                 ),
@@ -64,17 +65,17 @@ fun ConversionCard(
                 shape = cardShape,
                 color = MaterialTheme.colorScheme.surface
             )
-            .padding(16.dp)
+            .padding(20.dp)
             .fillMaxWidth()
     ) {
         Text(
             text = label,
-            color = Color.LightGray,
+            color = Color.Gray,
             fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Medium
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -86,9 +87,10 @@ fun ConversionCard(
                 value = value,
                 onValueChange = { onValueChange(it) },
                 textStyle = TextStyle(
-                    color = Color.DarkGray,
-                    fontSize = 30.sp,
+                    color = color,
+                    fontSize = 40.sp,
                     fontWeight = FontWeight.SemiBold,
+                    lineHeight = 48.sp,
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -107,12 +109,11 @@ fun ConversionCard(
                     indication = null,
                     onClick = onUnitClick
                 ),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
                     text = "${unit.unitName} (${unit.symbol})",
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.DarkGray,
                     fontSize = 14.sp,
                 )
                 Icon(
@@ -123,11 +124,11 @@ fun ConversionCard(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "≈ $approximateValue",
-            color = Color.LightGray,
+            text = "≈ $approximateValue ${unit.symbol}",
+            color = Color.Black.copy(alpha = 0.5f),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
         )

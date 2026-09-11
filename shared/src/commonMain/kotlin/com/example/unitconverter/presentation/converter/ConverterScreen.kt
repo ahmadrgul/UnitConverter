@@ -1,10 +1,18 @@
 package com.example.unitconverter.presentation.converter
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,16 +22,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.generated.resources.Res
+import com.example.unitconverter.generated.resources.swap_icon
 import com.example.unitconverter.presentation.converter.components.ConversionCard
 import com.example.unitconverter.presentation.converter.components.ConverterTopBar
 import com.example.unitconverter.presentation.converter.components.CopyResultButton
 import com.example.unitconverter.presentation.converter.components.UnitsBottomSheet
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -38,9 +53,12 @@ fun ConverterRoute(
 
     ConverterScreen(
         state = state,
+        onToggleFav = { viewModel.onToggleFavourite() },
         onInputValueChanged = { viewModel.onInputValueChange(it) },
         onFromUnitChange = { viewModel.onFromUnitChange(it) },
         onToUnitChange = { viewModel.onToUnitChange(it) },
+        onUnitsSwap = { viewModel.onUnitsSwap() },
+        onCopyResults = { viewModel.onCopyResults() },
         onNavigateBack = onNavigateBack
     )
 }
@@ -48,9 +66,12 @@ fun ConverterRoute(
 @Composable
 fun ConverterScreen(
     state: ConverterState,
+    onToggleFav: () -> Unit,
     onInputValueChanged: (String) -> Unit,
     onFromUnitChange: (QuantityUnit) -> Unit,
     onToUnitChange: (QuantityUnit) -> Unit,
+    onUnitsSwap: () -> Unit,
+    onCopyResults: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     var showInputUnitSheet by remember { mutableStateOf(false) }
@@ -60,7 +81,9 @@ fun ConverterScreen(
         topBar = {
             ConverterTopBar(
                 title = state.currentQuantity.quantityName,
-                onNavigateBack = onNavigateBack
+                isFav = state.isFavourite,
+                onFavAction = onToggleFav,
+                onNavigateBack = onNavigateBack,
             )
         }
     ) { innerPadding ->
@@ -69,56 +92,72 @@ fun ConverterScreen(
                 .padding(top = innerPadding.calculateTopPadding())
                 .padding(16.dp)
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
-            ConversionCard(
-                label = "From",
-                value = state.inputValue,
-                approximateValue = state.approximateInputValue,
-                editable = true,
-                unit = state.selectedFromUnit,
-                onUnitClick = { showInputUnitSheet = true },
-                onValueChange = onInputValueChanged,
-            ) { innerTextField ->
-                Box(contentAlignment = Alignment.CenterStart) {
-                    if (state.inputValue.isEmpty()) {
-                        Text(
-                            text = "Enter value",
-                            color = Color.LightGray,
-                            maxLines = 1,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
+            Box {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ConversionCard(
+                        label = "From",
+                        value = state.inputValue,
+                        approximateValue = state.approximateInputValue,
+                        editable = true,
+                        color = Color.Black,
+                        unit = state.selectedFromUnit,
+                        onUnitClick = { showInputUnitSheet = true },
+                        onValueChange = onInputValueChanged,
+                    ) { innerTextField ->
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if (state.inputValue.isEmpty()) {
+                                Text(
+                                    text = "Enter Value",
+                                    color = Color.LightGray,
+                                    maxLines = 1,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            innerTextField()
+                        }
                     }
-                    innerTextField()
+
+                    ConversionCard(
+                        label = "To",
+                        value = state.convertedValue,
+                        approximateValue = state.approximateConvertedValue,
+                        editable = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        unit = state.selectedToUnit,
+                        onUnitClick = { showOutputUnitSheet = true },
+                        onValueChange = {},
+                    ) { innerTextField ->
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if (state.convertedValue.isEmpty()) {
+                                Text(
+                                    text = "–",
+                                    color = Color.LightGray,
+                                    maxLines = 1,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
                 }
+
+                SwapButton(
+                    onSwap = onUnitsSwap,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
 
-            ConversionCard(
-                label = "To",
-                value = state.convertedValue,
-                approximateValue = state.approximateConvertedValue,
-                editable = false,
-                unit = state.selectedToUnit,
-                onUnitClick = { showOutputUnitSheet = true },
-                onValueChange = {},
-            ) { innerTextField ->
-                Box(contentAlignment = Alignment.CenterStart) {
-                    if (state.inputValue.isEmpty()) {
-                        Text(
-                            text = "–",
-                            color = Color.LightGray,
-                            maxLines = 1,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                    innerTextField()
-                }
-            }
-
-            CopyResultButton()
+            CopyResultButton(
+                result = state.convertedValue,
+                onCopyResults = onCopyResults,
+            )
         }
 
         UnitsBottomSheet(
@@ -135,6 +174,54 @@ fun ConverterScreen(
             selectedUnit = state.selectedToUnit,
             setSelectedUnit = { onToUnitChange(it) },
             hideSheet = { showOutputUnitSheet = false }
+        )
+    }
+}
+
+
+@Composable
+fun SwapButton(
+    modifier: Modifier = Modifier,
+    onSwap: () -> Unit,
+) {
+    var isFlipped by remember { mutableStateOf(false) }
+
+    val rotation by animateFloatAsState(
+        targetValue = if (isFlipped) 180f else 0f,
+        animationSpec = tween(durationMillis = 300),
+    )
+
+    IconButton(
+        onClick = {
+            onSwap()
+            isFlipped = !isFlipped
+        },
+        shape = CircleShape,
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        modifier = modifier
+            .padding(24.dp)
+            .size(50.dp)
+            .dropShadow(
+                shape = CircleShape,
+                shadow = Shadow(
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 6.dp,
+                    spread = 1.dp,
+                    offset = DpOffset(0.dp, 0.dp)
+                ),
+            )
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.swap_icon),
+            contentDescription = "Arrow Up Down",
+            modifier = Modifier
+                .size(24.dp)
+                .graphicsLayer {
+                    rotationX = rotation
+                    cameraDistance = 8 * density
+                }
         )
     }
 }

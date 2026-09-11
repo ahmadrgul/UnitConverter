@@ -42,6 +42,7 @@ import com.example.unitconverter.generated.resources.x_icon
 import com.example.unitconverter.presentation.theme.PaletteColors
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.round
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -153,7 +154,7 @@ fun PopularUnitsSection(
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             popularUnits.forEach { unit ->
                 PopularUnitCard(
@@ -174,6 +175,8 @@ fun PopularUnitCard(
     modifier: Modifier = Modifier,
     onSelect: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Box(
         modifier = modifier
             .height(70.dp)
@@ -196,7 +199,9 @@ fun PopularUnitCard(
                     if (!isSelected) {
                         onSelect()
                     }
-                }
+                },
+                interactionSource = interactionSource,
+                indication = null
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -247,6 +252,7 @@ fun AllUnitsListSection(
                 UnitListItem(
                     index = index,
                     unit = unit,
+                    isBaseUnit = unit == baseUnit,
                     baseUnitSymbol = baseUnit.symbol,
                     isSelected = selectedUnit == unit,
                     onSelect = onUnitSelect,
@@ -267,6 +273,7 @@ fun AllUnitsListSection(
 fun UnitListItem(
     index: Int,
     unit: QuantityUnit,
+    isBaseUnit: Boolean,
     baseUnitSymbol: String,
     isSelected: Boolean,
     onSelect: (QuantityUnit) -> Unit,
@@ -287,7 +294,7 @@ fun UnitListItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(11.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -296,8 +303,8 @@ fun UnitListItem(
                         PaletteColors[index % PaletteColors.size].copy(alpha = 0.1f)
                             .copy(alpha = 0.05f)
                     )
-                    .width(38.dp)
-                    .height(24.dp),
+                    .width(32.dp)
+                    .height(20.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -310,19 +317,18 @@ fun UnitListItem(
             Text(
                 text = unit.unitName,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
+                fontSize = 15.sp
             )
         }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Text(
-                text = "1 ${unit.symbol} = ${unit.baseMultiplier} $baseUnitSymbol",
+                text = if (isBaseUnit) "Base Unit" else "1 ${unit.symbol} = ${round(unit.baseMultiplier * 100) / 100.0} $baseUnitSymbol",
                 color = Color.LightGray,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                fontSize = 13.sp
             )
 
             CheckBox(

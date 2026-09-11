@@ -59,6 +59,9 @@ kotlin {
 
             implementation("io.insert-koin:koin-core:4.2.2")
             implementation("io.insert-koin:koin-compose-viewmodel:4.2.2")
+
+            implementation("androidx.datastore:datastore-preferences-core:1.2.1")
+            implementation("com.squareup.okio:okio:3.18.2")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

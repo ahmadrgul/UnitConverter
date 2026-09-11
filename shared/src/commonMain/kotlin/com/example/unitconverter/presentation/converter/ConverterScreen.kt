@@ -54,6 +54,7 @@ fun ConverterRoute(
 
     ConverterScreen(
         state = state,
+        onToggleFav = { viewModel.onToggleFavourite() },
         onInputValueChanged = { viewModel.onInputValueChange(it) },
         onFromUnitChange = { viewModel.onFromUnitChange(it) },
         onToUnitChange = { viewModel.onToUnitChange(it) },
@@ -66,6 +67,7 @@ fun ConverterRoute(
 @Composable
 fun ConverterScreen(
     state: ConverterState,
+    onToggleFav: () -> Unit,
     onInputValueChanged: (String) -> Unit,
     onFromUnitChange: (QuantityUnit) -> Unit,
     onToUnitChange: (QuantityUnit) -> Unit,
@@ -80,7 +82,9 @@ fun ConverterScreen(
         topBar = {
             ConverterTopBar(
                 title = state.currentQuantity.quantityName,
-                onNavigateBack = onNavigateBack
+                isFav = state.isFavourite,
+                onFavAction = onToggleFav,
+                onNavigateBack = onNavigateBack,
             )
         }
     ) { innerPadding ->

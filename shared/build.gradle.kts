@@ -67,6 +67,8 @@ kotlin {
 
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutines)
+
+            implementation(libs.kotlinx.datetime)
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver)

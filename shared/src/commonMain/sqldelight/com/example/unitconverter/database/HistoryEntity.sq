@@ -1,0 +1,20 @@
+CREATE TABLE HistoryEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    quantityId TEXT NOT NULL,
+    fromUnit TEXT NOT NULL,
+    toUnit TEXT NOT NULL,
+    fromValue REAL NOT NULL,
+    toValue REAL NOT NULL,
+    timestamp INTEGER NOT NULL
+);
+
+insertHistory:
+INSERT INTO HistoryEntity(quantityId, fromUnit, toUnit, fromValue, toValue, timestamp)
+VALUES (?, ?, ?, ?, ?, ?);
+
+getAllHistory:
+SELECT * FROM HistoryEntity
+ORDER BY timestamp DESC;
+
+clearHistory:
+DELETE FROM HistoryEntity;

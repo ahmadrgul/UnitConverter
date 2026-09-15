@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.sqldelight)
     kotlin("plugin.serialization") version "2.0.20"
 }
 
@@ -44,6 +45,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
+            implementation(libs.sqldelight.android.driver)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -54,14 +56,20 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.serialization.json)
 
-            implementation("io.insert-koin:koin-core:4.2.2")
-            implementation("io.insert-koin:koin-compose-viewmodel:4.2.2")
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
 
-            implementation("androidx.datastore:datastore-preferences-core:1.2.1")
-            implementation("com.squareup.okio:okio:3.18.2")
+            implementation(libs.androidx.datastore.preferences.core)
+            implementation(libs.okio)
+
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,5 +84,13 @@ dependencies {
 compose {
     resources {
         packageOfResClass = "com.example.unitconverter.generated.resources"
+    }
+}
+
+sqldelight {
+    databases {
+        create("UnitConverterDatabase") {
+            packageName.set("com.example.unitconverter.database")
+        }
     }
 }

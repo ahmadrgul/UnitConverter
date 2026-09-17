@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.unitconverter.presentation.converter.ConverterDestination
 import com.example.unitconverter.presentation.converter.converterScreen
+import com.example.unitconverter.presentation.history.historyScreen
 import com.example.unitconverter.presentation.home.HomeDestination
 import com.example.unitconverter.presentation.home.homeScreen
 import com.example.unitconverter.presentation.navigation.components.BottomBar
@@ -63,6 +64,8 @@ fun AppNavigation() {
             converterScreen(onNavigateBack = {
                 navController.popBackStack()
             })
+
+            historyScreen()
         }
     }
 }

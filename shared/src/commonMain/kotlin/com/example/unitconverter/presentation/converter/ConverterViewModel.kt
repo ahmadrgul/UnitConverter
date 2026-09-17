@@ -6,6 +6,7 @@ import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.domain.model.QuantityRegistry
 import com.example.unitconverter.domain.model.unit.QuantityUnit
 import com.example.unitconverter.domain.repository.FavouritesRepository
+import com.example.unitconverter.domain.repository.HistoryRepository
 import com.example.unitconverter.domain.usecase.ConvertUnitUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.math.round
+import kotlin.time.Clock
 
 enum class KeyboardKey(val symbol: String) {
     NUM_0("0"), NUM_1("1"), NUM_2("2"),
@@ -30,6 +32,7 @@ class ConverterViewModel(
     private val convertUnit: ConvertUnitUseCase,
     private val clipboardService: ClipboardService,
     private val favouritesRepository: FavouritesRepository,
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
     private val quantity = QuantityRegistry.getQuantityById(quantityId)
         ?: throw IllegalArgumentException("Unknown quantity ID: '$quantityId'")
@@ -90,7 +93,7 @@ class ConverterViewModel(
             KeyboardKey.BACKSPACE -> removeLastCharacter()
             KeyboardKey.AC -> clearAll()
             KeyboardKey.DOT -> appendDot()
-            KeyboardKey.EQUAL -> performConversion()
+            KeyboardKey.EQUAL -> { performConversion() }
             else -> appendNumber(key)
         }
     }
@@ -155,6 +158,17 @@ class ConverterViewModel(
                 convertedValue = numOutput.toString(),
                 approximateInputValue = roundedInput.toString(),
                 approximateConvertedValue = roundedOutput.toString()
+            )
+        }
+
+        viewModelScope.launch {
+            historyRepository.insertHistory(
+                quantity.id,
+                _state.value.selectedFromUnit.unitName,
+                _state.value.selectedToUnit.unitName,
+                roundedInput,
+                roundedOutput,
+                Clock.System.now().toEpochMilliseconds(),
             )
         }
     }

@@ -21,6 +21,12 @@ class HistoryRepositoryImpl(
             .mapToList(Dispatchers.IO)
     }
 
+    override suspend fun getHistoryById(id: Long): HistoryEntity? {
+       return queries
+           .getHistoryById(id)
+           .executeAsOneOrNull()
+    }
+
     override suspend fun insertHistory(
         quantityId: String,
         fromUnit: String,
@@ -41,5 +47,13 @@ class HistoryRepositoryImpl(
 
     override suspend fun clearHistory() {
         queries.clearHistory()
+    }
+
+    override suspend fun deleteHistoryById(id: Long) {
+        queries.deleteById(id)
+    }
+
+    override suspend fun updateIsStarred(id: Long, isStarred: Long) {
+        queries.updateIsStarred(id = id, isStarred = isStarred)
     }
 }

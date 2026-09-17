@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {
     fun getHistory(): Flow<List<HistoryEntity>>
+    suspend fun getHistoryById(id: Long): HistoryEntity?
     suspend fun insertHistory(
         quantityId: String,
         fromUnit: String,
@@ -14,4 +15,6 @@ interface HistoryRepository {
         timestamp: Long
     )
     suspend fun clearHistory()
+    suspend fun deleteHistoryById(id: Long)
+    suspend fun updateIsStarred(id: Long, isStarred: Long)
 }

@@ -5,6 +5,7 @@ CREATE TABLE HistoryEntity (
     toUnit TEXT NOT NULL,
     fromValue REAL NOT NULL,
     toValue REAL NOT NULL,
+    isStarred INTEGER DEFAULT 0,
     timestamp INTEGER NOT NULL
 );
 
@@ -16,5 +17,18 @@ getAllHistory:
 SELECT * FROM HistoryEntity
 ORDER BY timestamp DESC;
 
+getHistoryById:
+SELECT * FROM HistoryEntity
+WHERE id = :id;
+
 clearHistory:
 DELETE FROM HistoryEntity;
+
+deleteById:
+DELETE FROM HistoryEntity
+WHERE id = :id;
+
+updateIsStarred:
+UPDATE HistoryEntity
+SET isStarred = :isStarred
+WHERE id = :id;

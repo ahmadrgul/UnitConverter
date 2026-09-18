@@ -3,6 +3,7 @@ package com.example.unitconverter.di
 import com.example.unitconverter.data.repository.FavouritesRepositoryImpl
 import com.example.unitconverter.data.repository.HistoryRepositoryImpl
 import com.example.unitconverter.database.UnitConverterDatabase
+import com.example.unitconverter.presentation.settings.SettingsViewModel
 import com.example.unitconverter.domain.repository.FavouritesRepository
 import com.example.unitconverter.domain.repository.HistoryRepository
 import com.example.unitconverter.domain.usecase.ConvertUnitUseCase
@@ -19,6 +20,7 @@ val appModule = module {
     viewModelOf(::ConverterViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::HistoryViewModel)
+    viewModelOf(::SettingsViewModel)
 
     single<FavouritesRepository> { FavouritesRepositoryImpl(dataStore = get()) }
 

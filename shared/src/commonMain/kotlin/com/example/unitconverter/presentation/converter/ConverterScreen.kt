@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.swap_icon
 import com.example.unitconverter.presentation.converter.components.ConversionCard

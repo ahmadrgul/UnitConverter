@@ -1,6 +1,6 @@
-package com.example.unitconverter.domain.model
+package com.example.unitconverter.domain.model.quantity
 
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 
 data class Quantity<T : QuantityUnit>(
     val id: String,

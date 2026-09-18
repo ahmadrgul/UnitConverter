@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.chevron_down_icon
 import org.jetbrains.compose.resources.painterResource

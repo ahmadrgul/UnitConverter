@@ -1,4 +1,4 @@
-package com.example.unitconverter.domain.model
+package com.example.unitconverter.domain.model.quantity
 
 enum class QuantityCategory(
     val categoryName: String

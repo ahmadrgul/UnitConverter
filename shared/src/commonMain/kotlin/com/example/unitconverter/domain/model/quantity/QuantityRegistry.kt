@@ -1,16 +1,16 @@
-package com.example.unitconverter.domain.model
+package com.example.unitconverter.domain.model.quantity
 
-import com.example.unitconverter.domain.model.unit.AreaUnit
-import com.example.unitconverter.domain.model.unit.EnergyUnit
-import com.example.unitconverter.domain.model.unit.LengthUnit
-import com.example.unitconverter.domain.model.unit.PowerUnit
-import com.example.unitconverter.domain.model.unit.PressureUnit
-import com.example.unitconverter.domain.model.unit.QuantityUnit
-import com.example.unitconverter.domain.model.unit.SpeedUnit
-import com.example.unitconverter.domain.model.unit.TimeUnit
-import com.example.unitconverter.domain.model.unit.TorqueUnit
-import com.example.unitconverter.domain.model.unit.VolumeUnit
-import com.example.unitconverter.domain.model.unit.WeightUnit
+import com.example.unitconverter.domain.model.quantity.unit.AreaUnit
+import com.example.unitconverter.domain.model.quantity.unit.EnergyUnit
+import com.example.unitconverter.domain.model.quantity.unit.LengthUnit
+import com.example.unitconverter.domain.model.quantity.unit.PowerUnit
+import com.example.unitconverter.domain.model.quantity.unit.PressureUnit
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.unit.SpeedUnit
+import com.example.unitconverter.domain.model.quantity.unit.TimeUnit
+import com.example.unitconverter.domain.model.quantity.unit.TorqueUnit
+import com.example.unitconverter.domain.model.quantity.unit.VolumeUnit
+import com.example.unitconverter.domain.model.quantity.unit.WeightUnit
 
 object QuantityRegistry {
     val length: Quantity<QuantityUnit> = Quantity(

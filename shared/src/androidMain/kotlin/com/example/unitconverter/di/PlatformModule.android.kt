@@ -17,7 +17,7 @@ actual val platformModule: Module = module {
     single<DataStore<Preferences>> {
         val context: Context = get()
         createDataStore(
-            producePath = { context.filesDir.resolve("settings.preferences_pb").absolutePath }
+            producePath = { context.filesDir.resolve("favourites.preferences_pb").absolutePath }
         )
     }
 

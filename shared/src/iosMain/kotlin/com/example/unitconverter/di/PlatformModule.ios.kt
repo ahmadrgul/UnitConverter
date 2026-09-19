@@ -28,7 +28,7 @@ actual val platformModule: Module = module {
                 create = false,
                 error = null
             )
-            requireNotNull(documentDir).path + "/settings.preferences_pb"
+            requireNotNull(documentDir).path + "/favourites.preferences_pb"
         })
     }
 

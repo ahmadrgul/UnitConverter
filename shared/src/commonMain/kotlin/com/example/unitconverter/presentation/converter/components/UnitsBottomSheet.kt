@@ -34,8 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.unitconverter.domain.model.Quantity
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.Quantity
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.check_icon
 import com.example.unitconverter.generated.resources.x_icon

@@ -9,12 +9,20 @@ import com.example.unitconverter.core.utils.AndroidClipboardService
 import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.database.UnitConverterDatabase
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 actual val platformModule: Module = module {
     single<ClipboardService> { AndroidClipboardService(context = get()) }
 
-    single<DataStore<Preferences>> {
+    single<DataStore<Preferences>>(named(DataStoreQualifier.FAVOURITES)) {
+        val context: Context = get()
+        createDataStore(
+            producePath = { context.filesDir.resolve("favourites.preferences_pb").absolutePath }
+        )
+    }
+
+    single<DataStore<Preferences>>(named(DataStoreQualifier.SETTINGS)) {
         val context: Context = get()
         createDataStore(
             producePath = { context.filesDir.resolve("settings.preferences_pb").absolutePath }

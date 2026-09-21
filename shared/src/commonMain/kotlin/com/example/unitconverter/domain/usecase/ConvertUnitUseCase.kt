@@ -1,6 +1,6 @@
 package com.example.unitconverter.domain.usecase
 
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 
 class ConvertUnitUseCase {
     operator fun <T : QuantityUnit> invoke(value: Double, from: T, to: T): Double {

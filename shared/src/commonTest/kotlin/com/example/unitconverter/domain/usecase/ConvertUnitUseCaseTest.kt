@@ -1,6 +1,6 @@
 package com.example.unitconverter.domain.usecase
 
-import com.example.unitconverter.domain.model.unit.LengthUnit
+import com.example.unitconverter.domain.model.quantity.unit.LengthUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

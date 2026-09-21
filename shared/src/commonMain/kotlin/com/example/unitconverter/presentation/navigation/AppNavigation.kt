@@ -23,6 +23,7 @@ import com.example.unitconverter.presentation.history.historyScreen
 import com.example.unitconverter.presentation.home.HomeDestination
 import com.example.unitconverter.presentation.home.homeScreen
 import com.example.unitconverter.presentation.navigation.components.BottomBar
+import com.example.unitconverter.presentation.settings.settingsScreen
 
 @Composable
 fun AppNavigation() {
@@ -66,6 +67,7 @@ fun AppNavigation() {
             })
 
             historyScreen()
+            settingsScreen()
         }
     }
 }

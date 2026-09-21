@@ -1,8 +1,8 @@
 package com.example.unitconverter.presentation.home
 
 import androidx.lifecycle.ViewModel
-import com.example.unitconverter.domain.model.QuantityCategory
-import com.example.unitconverter.domain.model.QuantityRegistry
+import com.example.unitconverter.domain.model.quantity.QuantityCategory
+import com.example.unitconverter.domain.model.quantity.QuantityRegistry
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

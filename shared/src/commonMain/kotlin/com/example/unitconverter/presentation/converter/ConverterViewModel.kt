@@ -3,8 +3,8 @@ package com.example.unitconverter.presentation.converter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unitconverter.core.utils.ClipboardService
-import com.example.unitconverter.domain.model.QuantityRegistry
-import com.example.unitconverter.domain.model.unit.QuantityUnit
+import com.example.unitconverter.domain.model.quantity.QuantityRegistry
+import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.domain.repository.FavouritesRepository
 import com.example.unitconverter.domain.repository.HistoryRepository
 import com.example.unitconverter.domain.usecase.ConvertUnitUseCase

@@ -1,4 +1,4 @@
-package com.example.unitconverter.domain.model.unit
+package com.example.unitconverter.domain.model.quantity.unit
 
 enum class LengthUnit(
     override val unitName: String,

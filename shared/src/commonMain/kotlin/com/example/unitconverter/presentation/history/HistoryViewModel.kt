@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.unitconverter.core.utils.ClipboardService
 import com.example.unitconverter.core.utils.formatTimestamp
 import com.example.unitconverter.core.utils.toCleanNumberString
-import com.example.unitconverter.domain.model.QuantityRegistry
+import com.example.unitconverter.domain.model.quantity.QuantityRegistry
 import com.example.unitconverter.domain.repository.HistoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

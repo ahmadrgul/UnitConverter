@@ -1,43 +1,42 @@
 package com.example.unitconverter.presentation.settings
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.lifecycle.ViewModel
-import com.example.unitconverter.domain.model.settings.SettingsRegistry
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import androidx.lifecycle.viewModelScope
+import com.example.unitconverter.domain.model.settings.AppLanguage
+import com.example.unitconverter.domain.repository.SettingsRepository
+import com.example.unitconverter.presentation.settings.model.SectionId
+import com.example.unitconverter.presentation.settings.model.SettingId
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class SettingsViewModel: ViewModel() {
-    private val _state =
-        MutableStateFlow(SettingsState(
-            items = SettingsRegistry.getAllSettingsItems(),
-            isDarkTheme = false,
-            languages = listOf("English", "Urdu", "French"),
-            selectedLanguage = "English",
-            isHistoryEnabled = false,
-            precisionValues = listOf(1, 2, 3),
-            selectedPrecision = 2
-        ))
+class SettingsViewModel(
+    private val settingsRepository: SettingsRepository
+): ViewModel() {
+    val settings: StateFlow<SettingsState> = settingsRepository.settings
+        .map { SettingsState(it.toSections()) }
+        .stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(5000), initialValue = SettingsState())
 
-    val state = _state.asStateFlow()
-
-    fun toggleDarkTheme(){
-        _state.update { it.copy(isDarkTheme = !_state.value.isDarkTheme) }
-        TODO("Not implemented, yet")
+    fun onToggleChange(id: SettingId, enabled: Boolean){
+        viewModelScope.launch {
+            when (id) {
+                SettingId.THEME -> settingsRepository.setDarkMode(enabled)
+                SettingId.HISTORY -> settingsRepository.setSaveHistory(enabled)
+                else -> Unit
+            }
+        }
     }
 
-    fun setAppLanguage(lang: String){
-        _state.update { it.copy(selectedLanguage = lang) }
-        TODO("Not implemented, yet")
-    }
-
-    fun toggleHistory(){
-        _state.update { it.copy(isHistoryEnabled = !_state.value.isHistoryEnabled) }
-        TODO("Not implemented, yet")
-    }
-
-    fun setDecimalPrecision(precision: Int) {
-        _state.update { it.copy(selectedPrecision = precision) }
-        TODO("Not implemented, yet")
+    fun onChoiceSelect(id: SettingId, selected: String) {
+        viewModelScope.launch {
+            when (id) {
+                SettingId.LANGUAGE -> settingsRepository.setLanguage(AppLanguage.fromTag(selected) ?: AppLanguage.ENGLISH)
+                SettingId.PRECISION -> { settingsRepository.setPrecision(selected.toInt()) }
+                else -> Unit
+            }
+        }
     }
 }

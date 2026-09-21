@@ -1,6 +1,8 @@
-package com.example.unitconverter.presentation.settings.components
+package com.example.unitconverter.presentation.settings.components.cards
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,26 +20,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.unitconverter.domain.model.settings.SettingsItem
-import com.example.unitconverter.presentation.settings.SettingsState
+import com.example.unitconverter.generated.resources.Res
+import com.example.unitconverter.generated.resources.chevron_right_icon
+import com.example.unitconverter.presentation.settings.model.SettingId
+import com.example.unitconverter.presentation.settings.model.SettingsItemUi
 import com.example.unitconverter.presentation.theme.getSettingsItemIcon
 import com.example.unitconverter.presentation.theme.getSettingsItemIconColor
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun SettingsItemCard(
-    state: SettingsState,
-    item: SettingsItem,
-    dynamicContent: @Composable () -> Unit,
+fun LinkSettingsItemCard(
+    id: SettingId,
+    title: String,
+    subtitle: String?,
+    url: String
 ){
-    val icon = getSettingsItemIcon(item.id)
-    val color = getSettingsItemIconColor(item.id)
+    val uriHandler = LocalUriHandler.current
+
+    val icon = getSettingsItemIcon(id)
+    val color = getSettingsItemIconColor(id)
 
     Row(
         modifier = Modifier
+            .clickable(
+                onClick = { uriHandler.openUri(url) },
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            )
             .fillMaxWidth()
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
@@ -56,8 +69,8 @@ fun SettingsItemCard(
             ) {
                 Icon(
                     painter = painterResource(icon),
-                    contentDescription = item.id,
-                    tint = getSettingsItemIconColor(item.id),
+                    contentDescription = id.name,
+                    tint = getSettingsItemIconColor(id),
                     modifier = Modifier.size(26.dp)
                 )
             }
@@ -68,14 +81,14 @@ fun SettingsItemCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp, alignment = Alignment.CenterVertically)
             ) {
                 Text(
-                    text = item.title,
+                    text = title,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp
                 )
 
-                if (item.subtitle != null) {
+                if (subtitle != null) {
                     Text(
-                        text = item.subtitle,
+                        text = subtitle,
                         color = Color.Gray,
                         fontSize = 13.sp,
                     )
@@ -88,7 +101,12 @@ fun SettingsItemCard(
                 .fillMaxHeight(),
             contentAlignment = Alignment.Center
         ){
-            dynamicContent()
+            Icon(
+                painter = painterResource(Res.drawable.chevron_right_icon),
+                contentDescription = "Chevron Right",
+                modifier = Modifier.size(16.dp),
+                tint = Color.Gray
+            )
         }
 
     }

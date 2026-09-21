@@ -16,19 +16,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.unitconverter.domain.model.settings.SettingsItem
-import com.example.unitconverter.presentation.settings.SettingsState
+import com.example.unitconverter.presentation.settings.components.cards.ChoiceSettingsItemCard
+import com.example.unitconverter.presentation.settings.components.cards.LinkSettingsItemCard
+import com.example.unitconverter.presentation.settings.components.cards.ToggleSettingsItemCard
+import com.example.unitconverter.presentation.settings.model.SettingId
+import com.example.unitconverter.presentation.settings.model.SettingsItemUi
 
 
 @Composable
-fun SettingsGroup(
-    state: SettingsState,
+fun SettingsSection(
     title: String,
-    items: List<SettingsItem>,
-    toggleDarkTheme: () -> Unit,
-    toggleHistory: () -> Unit,
-    setAppLanguage: (String) -> Unit,
-    setPrecision: (Int) -> Unit
+    items: List<SettingsItemUi>,
+    onToggleChange: (SettingId, Boolean) -> Unit,
+    onChoiceSelect: (SettingId, String) -> Unit
 ){
     Column(
         modifier = Modifier.padding(vertical = 12.dp)
@@ -58,31 +58,35 @@ fun SettingsGroup(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items.forEachIndexed { index, item ->
-                SettingsItemCard(
-                    state,
-                    item,
-                    {
-                        DynamicItemRenderer(
-                            id = item.id,
-                            selectedLanguage = state.selectedLanguage,
-                            selectedPrecision = state.selectedPrecision,
-                            isDarkTheme = state.isDarkTheme,
-                            languageOptions = state.languages,
-                            precisionOptions = state.precisionValues,
-                            isHistoryEnabled = state.isHistoryEnabled,
-                            toggleDarkMode = toggleDarkTheme,
-                            toggleHistory = toggleHistory,
-                            setLanguage = setAppLanguage,
-                            setPrecision = setPrecision
-                        )
-                    }
-                )
-                if (index < items.size - 1) {
-                    HorizontalDivider(
-                        thickness = 0.2.dp,
-                        color = Color.Gray
+                when (item) {
+                    is SettingsItemUi.Toggle -> ToggleSettingsItemCard(
+                        item = item,
+                        onToggleChange = {
+                            onToggleChange(item.id, !item.checked)
+                        }
+                    )
+
+                    is SettingsItemUi.Choice -> ChoiceSettingsItemCard(
+                        id = item.id,
+                        title = item.title,
+                        subtitle = item.subtitle,
+                        options = item.options,
+                        currentValue = item.currentValue,
+                        onChoiceSelect = { onChoiceSelect(item.id, it) }
+                    )
+
+                    is SettingsItemUi.ExternalLink -> LinkSettingsItemCard(
+                        id = item.id,
+                        title = item.title,
+                        subtitle = item.subtitle,
+                        url = item.url
                     )
                 }
+
+                if (index < items.size - 1) {
+                    HorizontalDivider(thickness = 0.2.dp, color = Color.LightGray)
+                }
+
             }
         }
     }

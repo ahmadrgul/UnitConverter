@@ -15,9 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -28,22 +31,26 @@ fun QuantityCard(
     label: String,
     icon: DrawableResource,
     color: Color,
+    isDarkTheme: Boolean,
     onClick: () -> Unit,
 ) {
     val cardShape = RoundedCornerShape(12.dp)
 
     Column(
         modifier = Modifier
+            .clip(cardShape)
             .border(
-                color = color.copy(alpha = 0.1f),
+                color = if(isDarkTheme) MaterialTheme.colorScheme.onSurface.copy(0.05f) else color.copy(alpha = 0.1f),
                 width = 0.5.dp,
                 shape = cardShape
             )
-            .shadow(
-                elevation = 1.dp,
+            .dropShadow(
                 shape = cardShape,
-                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
-                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                shadow = Shadow(
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 2.dp,
+                    spread = 0.dp
+                )
             )
             .clickable(onClick = onClick)
             .background(
@@ -52,9 +59,12 @@ fun QuantityCard(
             )
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(
+                    colors = if(!isDarkTheme) listOf(
                         color.copy(alpha = 0.01f),
                         color.copy(alpha = 0.05f)
+                    ) else listOf(
+                        Color.Transparent,
+                        Color.Transparent
                     ),
                 ),
                 shape = cardShape

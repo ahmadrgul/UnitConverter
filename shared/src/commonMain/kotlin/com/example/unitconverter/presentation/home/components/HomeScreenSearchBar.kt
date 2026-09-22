@@ -46,9 +46,9 @@ fun HomeScreenSearchBar(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedIndicatorColor = Color.Transparent,
-            focusedIndicatorColor = Color.LightGray,
-            unfocusedPlaceholderColor = Color.Gray,
-            focusedPlaceholderColor = Color.Gray,
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(0.5f),
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(0.5f),
         ),
         modifier = Modifier
             .padding(
@@ -60,10 +60,9 @@ fun HomeScreenSearchBar(
             .dropShadow(
                 shape = textFieldShape,
                 shadow = Shadow(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    radius = 8.dp,
-                    spread = 0.dp,
-                    offset = DpOffset(0.dp, 0.dp)
+                    color = Color.Black.copy(alpha = 0.05f),
+                    radius = 2.dp,
+                    spread = 0.dp
                 )
             )
             .fillMaxWidth()

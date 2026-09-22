@@ -55,7 +55,7 @@ fun ClearHistoryDialog(
             Box(
                 modifier = Modifier
                     .background(
-                        color = Color.Red.copy(alpha = 0.05f),
+                        color = Color(0xFFD3494E).copy(alpha = 0.05f),
                         shape = CircleShape
                     )
                     .padding(12.dp)
@@ -63,7 +63,7 @@ fun ClearHistoryDialog(
                 Icon(
                     painter = painterResource(Res.drawable.trash_icon),
                     contentDescription = "Trash",
-                    tint = Color.Red,
+                    tint = Color(0xFFD3494E),
                     modifier = Modifier.size(36.dp)
                 )
             }
@@ -74,15 +74,14 @@ fun ClearHistoryDialog(
                 text = "Clear All History?",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color = Color.DarkGray
+                textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = "This will permanently delete all your conversion history. This action cannot be undone.",
-                color = Color.Gray.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
                 fontWeight = FontWeight.Medium,
@@ -120,7 +119,7 @@ fun ClearHistoryDialog(
                     },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red,
+                        containerColor = Color(0xFFD3494E),
                         contentColor = Color.White
                     ),
                     modifier = Modifier

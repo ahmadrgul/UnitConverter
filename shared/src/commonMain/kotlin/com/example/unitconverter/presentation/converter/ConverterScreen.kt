@@ -115,7 +115,7 @@ fun ConverterScreen(
                             value = state.inputValue,
                             approximateValue = state.approximateInputValue,
                             editable = false,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             unit = state.selectedFromUnit,
                             onUnitClick = { showInputUnitSheet = true },
                             onValueChange = { }
@@ -124,7 +124,7 @@ fun ConverterScreen(
                                 if (state.inputValue.isEmpty()) {
                                     Text(
                                         text = "Enter Value",
-                                        color = Color.LightGray,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
                                         maxLines = 1,
                                         fontSize = 32.sp,
                                         fontWeight = FontWeight.Medium
@@ -148,7 +148,7 @@ fun ConverterScreen(
                                 if (state.convertedValue.isEmpty()) {
                                     Text(
                                         text = "–",
-                                        color = Color.LightGray,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         maxLines = 1,
                                         fontSize = 32.sp,
                                         fontWeight = FontWeight.SemiBold
@@ -237,6 +237,7 @@ fun SwapButton(
         Icon(
             painter = painterResource(Res.drawable.swap_icon),
             contentDescription = "Arrow Up Down",
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .size(24.dp)
                 .graphicsLayer {

@@ -93,7 +93,7 @@ fun ChoiceSettingsItemCard(
                 if (subtitle != null) {
                     Text(
                         text = subtitle,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         fontSize = 13.sp,
                     )
                 }
@@ -133,7 +133,7 @@ fun CustomChoice(
         Text(
             text = currentValue,
             fontSize = 14.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             fontWeight = FontWeight.Medium
         )
         if (isDropDownVisible) {

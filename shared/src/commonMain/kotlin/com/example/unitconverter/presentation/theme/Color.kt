@@ -15,6 +15,7 @@ val TextPrimaryDark = Color(0xFFFFFFFF)
 
 val LightColors = lightColorScheme(
     primary = PrimaryLight,
+    onPrimary = Color.White,
     background = BgAppLight,
     surface = SurfaceLight,
     onBackground = TextPrimaryLight,
@@ -23,6 +24,7 @@ val LightColors = lightColorScheme(
 
 val DarkColors = darkColorScheme(
     primary = PrimaryDark,
+    onPrimary = Color.White,
     background = BgAppDark,
     surface = SurfaceDark,
     onBackground = TextPrimaryDark,

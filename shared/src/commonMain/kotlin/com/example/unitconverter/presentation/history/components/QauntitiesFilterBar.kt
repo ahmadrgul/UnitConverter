@@ -43,13 +43,13 @@ fun QuantitiesFilterBar(
                     selectedContainerColor = MaterialTheme.colorScheme.primary,
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = MaterialTheme.colorScheme.surface,
-                    labelColor = Color.Gray
+                    labelColor = MaterialTheme.colorScheme.onSurface.copy(alpha=0.6f)
                 ),
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,
                     selected = isSelected,
-                    borderColor = Color.LightGray,
-                    selectedBorderColor = MaterialTheme.colorScheme.primary,
+                    borderColor = MaterialTheme.colorScheme.onSurface,
+                    selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha=0.6f),
                     borderWidth = 0.05.dp,
                     selectedBorderWidth = 0.05.dp
                 ),

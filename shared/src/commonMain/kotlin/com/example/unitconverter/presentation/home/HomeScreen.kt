@@ -38,27 +38,26 @@ fun HomeRoute(
     val viewModel: HomeViewModel = koinViewModel()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val isDarkTheme by viewModel.isDarkTheme.collectAsStateWithLifecycle()
 
     HomeScreen(
         state = state,
+        isDarkTheme = isDarkTheme,
         onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
-        onNavigateToQuantity
+        onNavigateToQuantity = onNavigateToQuantity
     )
 }
 
 @Composable
 fun HomeScreen(
     state: HomeState,
+    isDarkTheme: Boolean,
     onSearchQueryChange: (String) -> Unit,
-    onNavigateToQuantity: (String) -> Unit,
+    onNavigateToQuantity: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { HomeScreenTopBar() },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-//            windowInsets = WindowInsets.safeDrawing,
-            )
+            HomeScreenTopBar()
         },
     ) { innerPadding ->
         Column(
@@ -93,6 +92,7 @@ fun HomeScreen(
                                 label = item.quantityName,
                                 icon = getQuantityIcon(item.id),
                                 color = getQuantityColor(index),
+                                isDarkTheme = isDarkTheme,
                                 onClick = { onNavigateToQuantity(item.id) })
                         }
 
@@ -112,18 +112,8 @@ fun HomeScreen(
 fun SectionHeading(
     text: String
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = text, style = MaterialTheme.typography.titleLarge
-        )
-        Text(
-            text = "See All",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
+    Text(
+        text = text, style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
 }

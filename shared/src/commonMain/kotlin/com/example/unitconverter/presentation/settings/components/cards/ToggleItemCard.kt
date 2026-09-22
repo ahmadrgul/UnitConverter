@@ -82,7 +82,7 @@ fun ToggleSettingsItemCard(
                 if (item.subtitle != null) {
                     Text(
                         text = item.subtitle,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         fontSize = 13.sp,
                     )
                 }

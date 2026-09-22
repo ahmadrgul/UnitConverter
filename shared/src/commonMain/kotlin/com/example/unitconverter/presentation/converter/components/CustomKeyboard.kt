@@ -51,7 +51,7 @@ fun CustomKeyboard(
                     CustomKeyboardKey(
                         content = key.symbol,
                         bgColor = if (key == KeyboardKey.EQUAL) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-                        fgColor = if (key == KeyboardKey.EQUAL) MaterialTheme.colorScheme.surface else Color.Black,
+                        fgColor = if (key == KeyboardKey.EQUAL) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
                         onClick = { onKeyPressed(key) },
                         modifier = Modifier.weight(1f)
                     )

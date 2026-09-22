@@ -59,7 +59,8 @@ fun UnitsBottomSheet(
     if (isVisible) {
         ModalBottomSheet(
             onDismissRequest = hideSheet,
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             Column(
                 modifier = Modifier
@@ -189,9 +190,7 @@ fun PopularUnitCard(
             )
             .background(
                 shape = RoundedCornerShape(14.dp),
-                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.05f) else Color.LightGray.copy(
-                    alpha = 0.1f
-                )
+                color = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.05f) else MaterialTheme.colorScheme.surface.copy(0.5f)
             )
             .padding(8.dp)
             .clickable(
@@ -215,14 +214,14 @@ fun PopularUnitCard(
         Column {
             Text(
                 text = unit.symbol,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.DarkGray,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = unit.unitName.lowercase(),
-                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.DarkGray,
+                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                 fontSize = 12.sp,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -239,7 +238,7 @@ fun AllUnitsListSection(
     onUnitSelect: (QuantityUnit) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = "All Units",
@@ -259,10 +258,7 @@ fun AllUnitsListSection(
                 )
 
                 if (index < units.size - 1) {
-                    HorizontalDivider(
-                        thickness = 0.2.dp,
-                        color = Color.LightGray
-                    )
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
                 }
             }
         }
@@ -327,7 +323,7 @@ fun UnitListItem(
         ) {
             Text(
                 text = if (isBaseUnit) "Base Unit" else "1 ${unit.symbol} = ${round(unit.baseMultiplier * 100) / 100.0} $baseUnitSymbol",
-                color = Color.LightGray,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
                 fontSize = 13.sp
             )
 
@@ -372,7 +368,7 @@ fun CheckBox(
             Icon(
                 painter = painterResource(Res.drawable.check_icon),
                 contentDescription = "Check Icon",
-                tint = MaterialTheme.colorScheme.surface
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

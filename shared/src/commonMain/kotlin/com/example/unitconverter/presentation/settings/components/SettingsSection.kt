@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,7 +46,7 @@ fun SettingsSection(
                 .dropShadow(
                     shape = RoundedCornerShape(12.dp),
                     shadow = Shadow(
-                        color = Color.LightGray.copy(alpha = 0.2f),
+                        color = Color.Black.copy(alpha = 0.05f),
                         radius = 5.dp,
                         spread = 0.dp
                     )
@@ -84,7 +85,7 @@ fun SettingsSection(
                 }
 
                 if (index < items.size - 1) {
-                    HorizontalDivider(thickness = 0.2.dp, color = Color.LightGray)
+                    HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
                 }
 
             }

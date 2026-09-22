@@ -1,13 +1,29 @@
 package com.example.unitconverter.presentation.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.unitconverter.domain.model.quantity.QuantityCategory
 import com.example.unitconverter.domain.model.quantity.QuantityRegistry
+import com.example.unitconverter.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val settingsRepository: SettingsRepository
+) : ViewModel() {
+    val isDarkTheme: StateFlow<Boolean> = settingsRepository.settings
+        .map { it.darkMode }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
+        )
+
     private val _state = MutableStateFlow(
         HomeState(
             categories = QuantityCategory.entries,

@@ -126,7 +126,7 @@ fun HistoryItemCard(
                     Spacer(modifier = Modifier.width(3.dp))
                     Text(
                         text = fromUnit,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
@@ -136,7 +136,7 @@ fun HistoryItemCard(
 
                 Text(
                     text = quantityName,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
@@ -151,7 +151,7 @@ fun HistoryItemCard(
                 Icon(
                     painter = painterResource(Res.drawable.arrow_right_icon),
                     contentDescription = "Arrow Right",
-                    tint = Color.Gray,
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -174,7 +174,7 @@ fun HistoryItemCard(
                 )
                 Text(
                     text = toUnit,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
@@ -198,7 +198,7 @@ fun HistoryItemCard(
                     Icon(
                         painter = painterResource(Res.drawable.ellipsis_icon),
                         contentDescription = "Ellipsis",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -269,7 +269,7 @@ fun HistoryItemCard(
                 text = timestamp,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
 
             IconButton(
@@ -287,7 +287,7 @@ fun HistoryItemCard(
                     Icon(
                         painter = painterResource(Res.drawable.star_icon),
                         contentDescription = "Star",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         modifier = Modifier.size(16.dp)
                     )
                 }

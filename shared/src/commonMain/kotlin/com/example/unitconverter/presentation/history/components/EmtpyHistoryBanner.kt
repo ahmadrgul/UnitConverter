@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +32,7 @@ fun EmptyHistoryBanner(
             painter = painterResource(Res.drawable.emtpy_clipboard),
             contentDescription = "Empty History",
             alpha = 0.2f,
-            contentScale = FixedScale(1.6f)
+            contentScale = FixedScale(1.5f)
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -46,7 +47,7 @@ fun EmptyHistoryBanner(
         Text(
             text = "Your conversions will appear here. Start converting to see your history.",
             textAlign = TextAlign.Center,
-            color = Color.Gray.copy(0.4f),
+            color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
             modifier = Modifier.padding(horizontal = 40.dp),
             lineHeight = 24.sp
         )

@@ -3,6 +3,7 @@ package com.example.unitconverter.presentation.history.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,7 +26,7 @@ fun HistoryItemsList(
             item { Text(
                 text = day,
                 fontWeight = FontWeight.Bold,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
             ) }
 

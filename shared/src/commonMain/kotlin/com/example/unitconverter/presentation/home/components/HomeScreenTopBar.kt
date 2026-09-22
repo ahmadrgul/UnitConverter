@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,13 +32,14 @@ fun HomeScreenTopBar() {
                 Text(
                     text = "Unit Converter",
                     style = MaterialTheme.typography.headlineLarge,
+                    fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                Spacer(Modifier.height(2.dp))
                 Text(
                     text = "Convert Anything, Anywhere.",
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(0.5f)
+                    color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
+                    modifier = Modifier.padding(start = 1.dp)
                 )
             }
         },

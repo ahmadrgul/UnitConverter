@@ -163,7 +163,7 @@ object QuantityRegistry {
         )
     )
 
-    private val allQuantities = listOf(
+    val allQuantities = listOf(
         length,
         area,
         time,

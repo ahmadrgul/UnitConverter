@@ -25,31 +25,56 @@ class HomeViewModel(
         )
 
     private val _state = MutableStateFlow(
-        HomeState(
-            categories = QuantityCategory.entries,
-            groupedQuantities = QuantityRegistry.groupedQuantities
-        )
+        HomeState()
     )
     val state = _state.asStateFlow()
 
-    fun onSearchQueryChange(searchQuery: String) {
-        _state.update { it.copy(searchQuery = searchQuery) }
-        loadQuantities()
+    init {
+        val categories = QuantityCategory.entries
+        val groupedQuantities = QuantityRegistry.groupedQuantities
+
+        val allUnits = QuantityRegistry.allQuantities.flatMap { it.availableUnits.map { unit -> SearchedUnitItem(
+            quantityId = it.id,
+            quantityName = it.quantityName,
+            unitName = unit.unitName
+        )}}.sortedBy { it.unitName }
+
+        _state.update { it.copy(
+            categories = categories,
+            allUnits = allUnits,
+            searchedUnits = mapOf("All Units" to allUnits),
+            groupedQuantities = groupedQuantities
+        )}
     }
 
-    private fun loadQuantities() {
-        val groupedQuantities = QuantityRegistry.groupedQuantities
-        val searchQuery = _state.value.searchQuery
+    fun onSearchQueryChange(searchQuery: String) {
+        val cleanQuery = searchQuery.trim()
 
-        if (searchQuery.isBlank()) {
-            _state.update { it.copy(groupedQuantities = groupedQuantities) }
+        if (cleanQuery == "") {
+            _state.update { it.copy(
+                searchQuery = searchQuery,
+                searchedUnits = mapOf(
+                    "All Units" to _state.value.allUnits
+                )
+            )}
             return
         }
 
-        val filteredQuantities = groupedQuantities.mapValues { (_, quantities) ->
-            quantities.filter { it.quantityName.contains(searchQuery, ignoreCase = true) }
-        }.filterValues { it.isNotEmpty() }
+        val searchedUnits = _state.value.allUnits.filter {
+            it.quantityName.contains(cleanQuery, ignoreCase = true) ||
+            it.unitName.contains(cleanQuery, ignoreCase = true)
+        }
 
-        _state.update { it.copy(groupedQuantities = filteredQuantities) }
+        val (best, others) = searchedUnits.partition {
+            it.unitName.startsWith(cleanQuery, ignoreCase = true)
+        }
+
+        _state.update { it.copy(
+            searchQuery = searchQuery,
+            searchedUnits = mapOf(
+                "Best Matches" to best,
+                "Other Matches" to others
+            ).filterValues { list -> list.isNotEmpty() }
+        )}
     }
 }

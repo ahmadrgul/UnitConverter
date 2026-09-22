@@ -8,6 +8,7 @@ fun UnitConverterTheme(
     isDark: Boolean,
     content: @Composable () -> Unit
 ) {
+    ApplyStatusBarAppearance(isDark)
     MaterialTheme(
         colorScheme = if (isDark) DarkColors else LightColors,
         typography = appTypography(),

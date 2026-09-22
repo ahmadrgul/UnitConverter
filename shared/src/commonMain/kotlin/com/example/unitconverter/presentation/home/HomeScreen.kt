@@ -1,6 +1,7 @@
 package com.example.unitconverter.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,6 +46,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
@@ -82,8 +87,14 @@ fun HomeScreen(
             HomeScreenTopBar()
         },
     ) { innerPadding ->
+        val keyboardController = LocalSoftwareKeyboardController.current
+
         Column(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
+            modifier = Modifier
+                .padding(top = innerPadding.calculateTopPadding())
+                .pointerInput(Unit) {
+                    detectTapGestures { keyboardController?.hide() }
+                }
         ) {
             var isSearchFocused by remember { mutableStateOf(false) }
 
@@ -95,6 +106,7 @@ fun HomeScreen(
 
             if (isSearchFocused) {
                 SearchResults(
+                    isQueryEmpty = state.searchQuery.isEmpty(),
                     searchedUnits = state.searchedUnits
                 )
 
@@ -154,9 +166,13 @@ fun SectionHeading(
 
 @Composable
 fun SearchResults(
+    isQueryEmpty: Boolean,
     searchedUnits: Map<String, List<SearchedUnitItem>>
 ){
     LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
     ) {
@@ -243,49 +259,51 @@ fun SearchResults(
             }
         }
 
-        item {
-            Row(
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
-                    .padding(vertical = 32.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.primary.copy(0.05f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .padding(horizontal = 16.dp, vertical =20.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                Box(
+        if (!isQueryEmpty) {
+            item {
+                Row(
                     modifier = Modifier
+                        .height(IntrinsicSize.Min)
+                        .padding(vertical = 32.dp)
+                        .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                            shape = RoundedCornerShape(10.dp),
+                            color = MaterialTheme.colorScheme.primary.copy(0.05f),
+                            shape = RoundedCornerShape(12.dp)
                         )
-                        .padding(10.dp)
+                        .padding(horizontal = 16.dp, vertical =20.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.search_icon),
-                        contentDescription = "Search icon",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-                Column (
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Can't find what you need?",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "Try searching with a different keyword.",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        fontSize = 14.sp,
-                    )
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                                shape = RoundedCornerShape(10.dp),
+                            )
+                            .padding(10.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.search_icon),
+                            contentDescription = "Search icon",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Column (
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Can't find what you need?",
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Try searching with a different keyword.",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            fontSize = 14.sp,
+                        )
+                    }
                 }
             }
         }

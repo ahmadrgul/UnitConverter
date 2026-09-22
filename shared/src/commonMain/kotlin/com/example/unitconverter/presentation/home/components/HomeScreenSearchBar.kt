@@ -1,5 +1,7 @@
 package com.example.unitconverter.presentation.home.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,10 +17,12 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.unitconverter.generated.resources.Res
 import com.example.unitconverter.generated.resources.search_icon
+import com.example.unitconverter.generated.resources.x_icon
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -29,6 +33,7 @@ fun HomeScreenSearchBar(
     onFocusChange: (Boolean) -> Unit,
 ) {
     val textFieldShape = RoundedCornerShape(25.dp)
+    val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = searchQuery,
@@ -38,9 +43,28 @@ fun HomeScreenSearchBar(
             Icon(
                 painter = painterResource(Res.drawable.search_icon),
                 contentDescription = "Search Icon",
-                tint = Color.Gray,
+                tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
                 modifier = Modifier.size(20.dp)
             )
+        },
+        trailingIcon = {
+            if (searchQuery.isNotEmpty()) {
+                Icon(
+                    painter = painterResource(Res.drawable.x_icon),
+                    contentDescription = "Cross Icon",
+                    tint = MaterialTheme.colorScheme.onSurface.copy(0.8f),
+                    modifier = Modifier
+                        .size(14.dp)
+                        .clickable(
+                            interactionSource = MutableInteractionSource(),
+                            indication = null,
+                            onClick = {
+                                onSearchQueryChange("")
+                                focusManager.clearFocus()
+                            }
+                        )
+                )
+            }
         },
         singleLine = true,
         shape = textFieldShape,
@@ -63,7 +87,7 @@ fun HomeScreenSearchBar(
                 shape = textFieldShape,
                 shadow = Shadow(
                     color = Color.Black.copy(alpha = 0.05f),
-                    radius = 2.dp,
+                    radius = 5.dp,
                     spread = 0.dp
                 )
             )

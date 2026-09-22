@@ -7,6 +7,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -56,7 +59,10 @@ fun AppNavigation() {
         NavHost(
             navController = navController,
             startDestination = HomeDestination,
-            modifier = Modifier.padding(bottom = animatedPadding)
+            modifier = Modifier
+                .padding(bottom = animatedPadding)
+                .consumeWindowInsets(PaddingValues(bottom = innerPadding.calculateBottomPadding()))
+                .imePadding()
         ) {
             homeScreen(onNavigateToConverter = {
                 navController.navigate(ConverterDestination(it))

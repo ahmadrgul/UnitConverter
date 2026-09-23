@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.stateIn
 class AppViewModel(
     settingsRepository: SettingsRepository
 ) : ViewModel() {
-    val isDarkTheme: StateFlow<Boolean> = settingsRepository.settings
+    val isDarkTheme: StateFlow<Boolean?> = settingsRepository.settings
         .map { it.darkMode }
         .stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = false
+        initialValue = null
     )
 }

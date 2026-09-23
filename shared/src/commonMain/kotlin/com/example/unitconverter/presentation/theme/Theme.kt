@@ -5,13 +5,15 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun UnitConverterTheme(
-    isDark: Boolean,
+    isDark: Boolean?,
     content: @Composable () -> Unit
 ) {
-    ApplyStatusBarAppearance(isDark)
-    MaterialTheme(
-        colorScheme = if (isDark) DarkColors else LightColors,
-        typography = appTypography(),
-        content = content
-    )
+    if (isDark != null) {
+        ApplyStatusBarAppearance(isDark)
+        MaterialTheme(
+            colorScheme = if (isDark) DarkColors else LightColors,
+            typography = appTypography(),
+            content = content
+        )
+    }
 }

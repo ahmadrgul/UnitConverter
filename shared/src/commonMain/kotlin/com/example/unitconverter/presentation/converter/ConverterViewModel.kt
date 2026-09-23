@@ -91,8 +91,10 @@ class ConverterViewModel(
                 if (historyItem != null) {
                     _state.update { it.copy(
                         inputValue = historyItem.fromValue.toString(),
+                        approximateInputValue = (round(historyItem.fromValue * 100) / 100.0).toString(),
                         selectedFromUnit = QuantityRegistry.getUnitByName(historyItem.fromUnit)!!,
                         convertedValue = historyItem.toValue.toString(),
+                        approximateConvertedValue = (round(historyItem.toValue * 100) / 100.0).toString(),
                         selectedToUnit = QuantityRegistry.getUnitByName(historyItem.toUnit)!!,
                     ) }
                 }

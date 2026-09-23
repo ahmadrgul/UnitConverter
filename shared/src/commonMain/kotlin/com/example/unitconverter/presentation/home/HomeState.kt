@@ -8,6 +8,7 @@ import org.jetbrains.compose.resources.DrawableResource
 data class SearchedUnitItem(
     val quantityId: String,
     val unitName: String,
+    val unitSymbol: String,
     val quantityName: String,
 )
 

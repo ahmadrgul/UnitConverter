@@ -36,7 +36,8 @@ class HomeViewModel(
         val allUnits = QuantityRegistry.allQuantities.flatMap { it.availableUnits.map { unit -> SearchedUnitItem(
             quantityId = it.id,
             quantityName = it.quantityName,
-            unitName = unit.unitName
+            unitName = unit.unitName,
+            unitSymbol = unit.symbol
         )}}.sortedBy { it.unitName }
 
         _state.update { it.copy(
@@ -62,7 +63,8 @@ class HomeViewModel(
 
         val searchedUnits = _state.value.allUnits.filter {
             it.quantityName.contains(cleanQuery, ignoreCase = true) ||
-            it.unitName.contains(cleanQuery, ignoreCase = true)
+            it.unitName.contains(cleanQuery, ignoreCase = true) ||
+            it.unitSymbol.contains(cleanQuery, ignoreCase = true)
         }
 
         val (best, others) = searchedUnits.partition {

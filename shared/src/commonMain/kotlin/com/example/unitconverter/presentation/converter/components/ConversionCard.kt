@@ -128,7 +128,7 @@ fun ConversionCard(
 
         Text(
             text = "≈ $approximateValue ${unit.symbol}",
-            color = Color.Black.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
         )

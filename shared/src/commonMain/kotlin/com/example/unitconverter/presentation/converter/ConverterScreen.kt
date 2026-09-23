@@ -184,7 +184,10 @@ fun ConverterScreen(
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
-                CustomKeyboard(onKeyPressed = onKeyPressed)
+                CustomKeyboard(
+                    isInputEmpty = state.inputValue.isEmpty(),
+                    onKeyPressed = onKeyPressed
+                )
             }
         }
 

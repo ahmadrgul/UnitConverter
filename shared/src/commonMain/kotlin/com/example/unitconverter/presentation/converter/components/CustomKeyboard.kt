@@ -25,6 +25,7 @@ import com.example.unitconverter.presentation.converter.KeyboardKey
 
 @Composable
 fun CustomKeyboard(
+    isInputEmpty: Boolean,
     onKeyPressed: (KeyboardKey) -> Unit,
 ) {
     val keyRows = listOf(
@@ -50,6 +51,7 @@ fun CustomKeyboard(
                 row.forEach { key ->
                     CustomKeyboardKey(
                         content = key.symbol,
+                        enabled = !((key == KeyboardKey.EQUAL || key == KeyboardKey.BACKSPACE) && isInputEmpty),
                         bgColor = if (key == KeyboardKey.EQUAL) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
                         fgColor = if (key == KeyboardKey.EQUAL) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
                         onClick = { onKeyPressed(key) },
@@ -64,6 +66,7 @@ fun CustomKeyboard(
 @Composable
 fun CustomKeyboardKey(
     content: String,
+    enabled: Boolean,
     bgColor: Color,
     fgColor: Color,
     onClick: () -> Unit,
@@ -72,6 +75,7 @@ fun CustomKeyboardKey(
     val keyShape = RoundedCornerShape(10.dp)
 
     Button(
+        enabled = enabled,
         onClick = onClick,
         shape = keyShape,
         colors = ButtonDefaults.buttonColors(
@@ -92,7 +96,6 @@ fun CustomKeyboardKey(
     ) {
         Text(
             text = content,
-            color = fgColor,
             fontWeight = FontWeight.Medium,
             fontSize = 24.sp
         )

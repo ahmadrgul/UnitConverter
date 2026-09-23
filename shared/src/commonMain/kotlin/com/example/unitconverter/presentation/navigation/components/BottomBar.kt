@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
@@ -34,10 +35,11 @@ fun BottomBar(
         containerColor = MaterialTheme.colorScheme.surface,
         modifier = Modifier
             .dropShadow(
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp
-                ),
+//                shape = RoundedCornerShape(
+//                    topStart = 20.dp,
+//                    topEnd = 20.dp
+//                ),
+                shape = RectangleShape,
                 shadow = Shadow(
                     color = Color.Black.copy(alpha = 0.05f),
                     radius = 6.dp,
@@ -46,10 +48,10 @@ fun BottomBar(
             )
             .background(
                 color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp
-                )
+//                shape = RoundedCornerShape(
+//                    topStart = 20.dp,
+//                    topEnd = 20.dp
+//                )
             )
             .padding(horizontal = 16.dp)
     ) {

@@ -30,6 +30,7 @@ import org.jetbrains.compose.resources.painterResource
 fun HomeScreenSearchBar(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
+    clearFocus: () -> Unit,
     onFocusChange: (Boolean) -> Unit,
 ) {
     val textFieldShape = RoundedCornerShape(25.dp)
@@ -59,6 +60,7 @@ fun HomeScreenSearchBar(
                             indication = null,
                             onClick = {
                                 onSearchQueryChange("")
+                                clearFocus()
                             }
                         )
                 )

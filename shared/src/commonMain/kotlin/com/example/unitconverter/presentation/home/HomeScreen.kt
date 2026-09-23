@@ -90,7 +90,8 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         val keyboardController = LocalSoftwareKeyboardController.current
-        var isSearchFocused by remember { mutableStateOf(false) }
+        var showSearchResults  by remember { mutableStateOf(false) }
+
         val focusManager = LocalFocusManager.current
 
         Column(
@@ -98,8 +99,8 @@ fun HomeScreen(
                 .padding(top = innerPadding.calculateTopPadding())
                 .pointerInput(Unit) {
                     detectTapGestures {
-                        keyboardController?.hide()
                         focusManager.clearFocus()
+                        keyboardController?.hide()
                     }
                 }
         ) {
@@ -107,16 +108,15 @@ fun HomeScreen(
             HomeScreenSearchBar(
                 searchQuery = state.searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
+                clearFocus = { focusManager.clearFocus() },
                 onFocusChange = {
-                    isSearchFocused = it
-                    if (!it) {
-                        onSearchQueryChange("")
-                        focusManager.clearFocus()
+                    if (it) {
+                        showSearchResults = true
                     }
                 }
             )
 
-            if (isSearchFocused) {
+            if (showSearchResults) {
                 SearchResults(
                     searchedUnits = state.searchedUnits,
                     onNavigateToUnit = { quantityId, unitName -> onNavigateToQuantity(quantityId, unitName) }

@@ -95,7 +95,6 @@ fun HistoryScreen(
         Box(
             modifier = Modifier
                 .padding(top = innerPadding.calculateTopPadding())
-                .padding(horizontal = 16.dp)
                 .fillMaxSize()
         ) {
             if (state.isLoading) {}

@@ -22,7 +22,9 @@ fun HistoryItemsList(
     onCopyHistoryItem: (Long) -> Unit,
     onNavigateToConverter: (String, Long) -> Unit,
 ){
-    LazyColumn {
+    LazyColumn (
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
         items.keys.forEach { day ->
             item { Text(
                 text = day,

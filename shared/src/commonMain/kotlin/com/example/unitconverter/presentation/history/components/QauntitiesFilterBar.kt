@@ -4,6 +4,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
@@ -28,7 +29,9 @@ fun QuantitiesFilterBar(
     val options = remember(quantities) { listOf("" to "All") + quantities.map { it to it } }
 
     Row(
-        modifier = Modifier.horizontalScroll(scrollState),
+        modifier = Modifier
+            .horizontalScroll(scrollState)
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         options.forEach { (value, label) ->
@@ -48,7 +51,7 @@ fun QuantitiesFilterBar(
                 border = FilterChipDefaults.filterChipBorder(
                     enabled = true,
                     selected = isSelected,
-                    borderColor = MaterialTheme.colorScheme.onSurface,
+                    borderColor = MaterialTheme.colorScheme.onSurface.copy(0.1f),
                     selectedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha=0.6f),
                     borderWidth = 0.05.dp,
                     selectedBorderWidth = 0.05.dp

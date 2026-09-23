@@ -90,25 +90,34 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         val keyboardController = LocalSoftwareKeyboardController.current
+        var isSearchFocused by remember { mutableStateOf(false) }
+        val focusManager = LocalFocusManager.current
 
         Column(
             modifier = Modifier
                 .padding(top = innerPadding.calculateTopPadding())
                 .pointerInput(Unit) {
-                    detectTapGestures { keyboardController?.hide() }
+                    detectTapGestures {
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }
                 }
         ) {
-            var isSearchFocused by remember { mutableStateOf(false) }
 
             HomeScreenSearchBar(
                 searchQuery = state.searchQuery,
                 onSearchQueryChange = onSearchQueryChange,
-                onFocusChange = { isSearchFocused = it }
+                onFocusChange = {
+                    isSearchFocused = it
+                    if (!it) {
+                        onSearchQueryChange("")
+                        focusManager.clearFocus()
+                    }
+                }
             )
 
             if (isSearchFocused) {
                 SearchResults(
-                    isQueryEmpty = state.searchQuery.isEmpty(),
                     searchedUnits = state.searchedUnits,
                     onNavigateToUnit = { quantityId, unitName -> onNavigateToQuantity(quantityId, unitName) }
                 )
@@ -169,7 +178,6 @@ fun SectionHeading(
 
 @Composable
 fun SearchResults(
-    isQueryEmpty: Boolean,
     searchedUnits: Map<String, List<SearchedUnitItem>>,
     onNavigateToUnit: (String, String) -> Unit,
 ){
@@ -265,7 +273,7 @@ fun SearchResults(
             }
         }
 
-        if (!isQueryEmpty) {
+        if (searchedUnits.isEmpty()) {
             item {
                 Row(
                     modifier = Modifier

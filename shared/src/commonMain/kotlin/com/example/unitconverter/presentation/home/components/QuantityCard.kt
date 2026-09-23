@@ -38,19 +38,18 @@ fun QuantityCard(
 
     Column(
         modifier = Modifier
+            .padding(vertical = 1.dp)
+            .shadow(
+                elevation = 6.dp,
+                shape = cardShape,
+                ambientColor = Color.Black.copy(0.1f),
+                spotColor = Color.Black.copy(0.1f)
+            )
             .clip(cardShape)
             .border(
                 color = if(isDarkTheme) MaterialTheme.colorScheme.onSurface.copy(0.05f) else color.copy(alpha = 0.1f),
                 width = 0.5.dp,
                 shape = cardShape
-            )
-            .dropShadow(
-                shape = cardShape,
-                shadow = Shadow(
-                    color = Color.Black.copy(alpha = 0.05f),
-                    radius = 2.dp,
-                    spread = 0.dp
-                )
             )
             .clickable(onClick = onClick)
             .background(

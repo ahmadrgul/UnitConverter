@@ -33,7 +33,6 @@ fun HomeScreenSearchBar(
     onFocusChange: (Boolean) -> Unit,
 ) {
     val textFieldShape = RoundedCornerShape(25.dp)
-    val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
         value = searchQuery,
@@ -60,7 +59,6 @@ fun HomeScreenSearchBar(
                             indication = null,
                             onClick = {
                                 onSearchQueryChange("")
-                                focusManager.clearFocus()
                             }
                         )
                 )

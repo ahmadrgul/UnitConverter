@@ -5,7 +5,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 val PrimaryLight = Color(0xFF0d8ff9)
-val PrimaryDark = Color(0xFF52B37D)
+val PrimaryDark = Color(0xFF0d8ff9)
+//val PrimaryDark = Color(0xFF52B37D)
 val BgAppLight = Color(0xFFfafcff)
 val BgAppDark = Color(0xFF101726)
 val SurfaceLight = Color(0xFFFFFFFF)

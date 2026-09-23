@@ -1,8 +1,11 @@
 package com.example.unitconverter.presentation.home.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -13,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +28,8 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.graphicsLayer
 
 @Composable
 fun QuantityCard(
@@ -34,6 +39,14 @@ fun QuantityCard(
     isDarkTheme: Boolean,
     onClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        label = "Bounce Animation"
+    )
+
     val cardShape = RoundedCornerShape(12.dp)
 
     Column(
@@ -45,13 +58,20 @@ fun QuantityCard(
                 ambientColor = Color.Black.copy(0.1f),
                 spotColor = Color.Black.copy(0.1f)
             )
-            .clip(cardShape)
+            .clickable(
+                onClick = onClick,
+                interactionSource = interactionSource,
+                indication = null
+            )
+            .graphicsLayer(
+                scaleX = scale,
+                scaleY = scale
+            )
             .border(
                 color = if(isDarkTheme) MaterialTheme.colorScheme.onSurface.copy(0.05f) else color.copy(alpha = 0.1f),
                 width = 0.5.dp,
                 shape = cardShape
             )
-            .clickable(onClick = onClick)
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = cardShape

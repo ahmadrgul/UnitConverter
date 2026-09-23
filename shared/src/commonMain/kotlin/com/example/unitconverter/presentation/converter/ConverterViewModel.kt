@@ -3,6 +3,7 @@ package com.example.unitconverter.presentation.converter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unitconverter.core.utils.ClipboardService
+import com.example.unitconverter.core.utils.toCleanNumberString
 import com.example.unitconverter.domain.model.quantity.QuantityRegistry
 import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.domain.repository.FavouritesRepository
@@ -141,19 +142,22 @@ class ConverterViewModel(
             KeyboardKey.BACKSPACE -> removeLastCharacter()
             KeyboardKey.AC -> clearAll()
             KeyboardKey.DOT -> appendDot()
-            KeyboardKey.EQUAL -> { performConversion() }
+            KeyboardKey.EQUAL -> {
+                performConversionFromCurrInput()
+                saveCurrToHistory()
+            }
             else -> appendNumber(key)
         }
     }
 
     fun onFromUnitChange(newFromUnit: QuantityUnit) {
         _state.update { it.copy(selectedFromUnit = newFromUnit) }
-        performConversion()
+        performConversionFromCurrInput()
     }
 
     fun onToUnitChange(newToUnit: QuantityUnit) {
         _state.update { it.copy(selectedToUnit = newToUnit) }
-        performConversion()
+        performConversionFromCurrInput()
     }
 
     fun onUnitsSwap() {
@@ -166,7 +170,7 @@ class ConverterViewModel(
         _state.update { it.copy(convertedValue = _state.value.inputValue) }
         _state.update { it.copy(inputValue = prevToValue) }
 
-        performConversion()
+        performConversionFromCurrInput()
     }
 
     fun onCopyResults() {
@@ -179,7 +183,22 @@ class ConverterViewModel(
         }
     }
 
-    private fun performConversion() {
+    private fun saveCurrToHistory() {
+        if (historyEnabled.value) {
+            viewModelScope.launch {
+                historyRepository.insertHistory(
+                    quantity.id,
+                    _state.value.selectedFromUnit.unitName,
+                    _state.value.selectedToUnit.unitName,
+                    _state.value.inputValue.toDouble(),
+                    _state.value.convertedValue.toDouble(),
+                    Clock.System.now().toEpochMilliseconds(),
+                )
+            }
+        }
+    }
+
+    private fun performConversionFromCurrInput() {
         val currentState = _state.value
         val textInput = currentState.inputValue
 
@@ -194,37 +213,23 @@ class ConverterViewModel(
             return
         }
 
-        val numInput = textInput.toDoubleOrNull() ?: 0.0
-        val numOutput =
-            convertUnit(numInput, currentState.selectedFromUnit, currentState.selectedToUnit)
+        val rawDoubleInput = textInput.toDoubleOrNull() ?: 0.0
+        val rawDoubleOutput =
+            convertUnit(rawDoubleInput, currentState.selectedFromUnit, currentState.selectedToUnit)
 
-        val resolvedOutput = round(numOutput * (10.0).pow(precision.value).toInt()) / (10.0).pow(precision.value)
+        val precisionCalculationNumber = (10.0).pow(precision.value)
 
-        println("${precision.value}: ${(10.0).pow(precision.value).toInt()}: $numOutput -> $resolvedOutput")
+        val boundedOutput = round(rawDoubleOutput * precisionCalculationNumber) / precisionCalculationNumber
 
-        val roundedInput = round(numInput * 100) / 100.0
-        val roundedOutput = round(numOutput * 100) / 100.0
+        val roundedInput = round(rawDoubleInput * 100) / 100.0
+        val roundedOutput = round(boundedOutput * 100) / 100.0
 
         _state.update {
             it.copy(
-                convertedValue = resolvedOutput.toString(),
+                convertedValue = boundedOutput.toCleanNumberString(),
                 approximateInputValue = roundedInput.toString(),
                 approximateConvertedValue = roundedOutput.toString()
             )
         }
-
-        if (historyEnabled.value) {
-            viewModelScope.launch {
-                historyRepository.insertHistory(
-                    quantity.id,
-                    _state.value.selectedFromUnit.unitName,
-                    _state.value.selectedToUnit.unitName,
-                    roundedInput,
-                    resolvedOutput,
-                    Clock.System.now().toEpochMilliseconds(),
-                )
-            }
-        }
-
     }
 }

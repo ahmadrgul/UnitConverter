@@ -13,6 +13,7 @@ import com.example.unitconverter.presentation.app.AppViewModel
 import com.example.unitconverter.presentation.converter.ConverterViewModel
 import com.example.unitconverter.presentation.history.HistoryViewModel
 import com.example.unitconverter.presentation.home.HomeViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -21,7 +22,19 @@ val appModule = module {
     includes(platformModule)
 
     single { ConvertUnitUseCase() }
-    viewModelOf(::ConverterViewModel)
+
+    viewModel { params ->
+        ConverterViewModel(
+            quantityId = params.get(),
+            fromUnitName = params.getOrNull(),
+            historyId = params.getOrNull(),
+            convertUnit = get(),
+            clipboardService = get(),
+            favouritesRepository = get(),
+            historyRepository = get()
+        )
+    }
+
     viewModelOf(::HomeViewModel)
     viewModelOf(::HistoryViewModel)
     viewModelOf(::SettingsViewModel)

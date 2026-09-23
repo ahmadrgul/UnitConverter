@@ -52,9 +52,16 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun ConverterRoute(
     quantityId: String,
+    fromUnitName: String?,
+    historyId: Long?,
     onNavigateBack: () -> Unit
 ) {
-    val viewModel: ConverterViewModel = koinViewModel(parameters = { parametersOf(quantityId) })
+    val viewModel: ConverterViewModel = koinViewModel(parameters = {
+        parametersOf(
+            quantityId,
+            fromUnitName,
+            historyId
+        ) })
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 

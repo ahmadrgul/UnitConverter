@@ -19,7 +19,8 @@ fun HistoryItemsList(
     items: Map<String, List<HistoryItemUI>>,
     onDeleteItem: (Long) -> Unit,
     onToggleStarred: (Long, Boolean) -> Unit,
-    onCopyHistoryItem: (Long) -> Unit
+    onCopyHistoryItem: (Long) -> Unit,
+    onNavigateToConverter: (String, Long) -> Unit,
 ){
     LazyColumn {
         items.keys.forEach { day ->
@@ -43,7 +44,8 @@ fun HistoryItemsList(
                     timestamp = "${if (day != "Today") "${item.timestamp.day}," else ""} ${item.timestamp.time}",
                     onDelete = { onDeleteItem(item.dbId) },
                     onStarred = { onToggleStarred(item.dbId, item.isStarred) },
-                    onCopy = { onCopyHistoryItem(item.dbId) }
+                    onCopy = { onCopyHistoryItem(item.dbId) },
+                    onClick = { onNavigateToConverter(item.quantityId, item.dbId) }
                 )
             }
         }

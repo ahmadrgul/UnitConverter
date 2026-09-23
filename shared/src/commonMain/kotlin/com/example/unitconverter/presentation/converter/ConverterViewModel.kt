@@ -28,7 +28,9 @@ enum class KeyboardKey(val symbol: String) {
 }
 
 class ConverterViewModel(
-    quantityId: String,
+    private val quantityId: String,
+    private val fromUnitName: String?,
+    private val historyId: Long?,
     private val convertUnit: ConvertUnitUseCase,
     private val clipboardService: ClipboardService,
     private val favouritesRepository: FavouritesRepository,
@@ -49,6 +51,27 @@ class ConverterViewModel(
 
     init {
         viewModelScope.launch {
+            if (fromUnitName != null) {
+                val unit = QuantityRegistry.getUnitByName(fromUnitName)
+                if (unit != null) {
+                    _state.update { it.copy(
+                        selectedFromUnit = unit,
+                    ) }
+                }
+            }
+
+            if (historyId != null) {
+                val historyItem = historyRepository.getHistoryById(historyId)
+                if (historyItem != null) {
+                    _state.update { it.copy(
+                        inputValue = historyItem.fromValue.toString(),
+                        selectedFromUnit = QuantityRegistry.getUnitByName(historyItem.fromUnit)!!,
+                        convertedValue = historyItem.toValue.toString(),
+                        selectedToUnit = QuantityRegistry.getUnitByName(historyItem.toUnit)!!,
+                    ) }
+                }
+            }
+
             favouritesRepository.getFavouriteQuantityIds().collect { favouritesSet ->
                 _state.update {
                     it.copy(isFavourite = favouritesSet.contains(quantityId))

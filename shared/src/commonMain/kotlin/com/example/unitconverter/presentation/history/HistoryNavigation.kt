@@ -8,6 +8,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 object HistoryDestination: BottomBarRoute
 
-fun NavGraphBuilder.historyScreen(){
-    return composable<HistoryDestination> { HistoryRoute() }
+fun NavGraphBuilder.historyScreen(
+    onNavigateToConverter: (String, Long) -> Unit
+){
+    return composable<HistoryDestination> { HistoryRoute(
+        onNavigateToConverter = onNavigateToConverter
+    ) }
 }

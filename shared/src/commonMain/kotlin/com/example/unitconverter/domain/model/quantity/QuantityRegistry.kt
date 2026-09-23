@@ -176,6 +176,12 @@ object QuantityRegistry {
         pressure
     )
 
+    val allUnits = allQuantities.flatMap { it.availableUnits }
+
+    fun getUnitByName(name: String): QuantityUnit? {
+        return allUnits.find { it.unitName == name }
+    }
+
     val groupedQuantities = allQuantities.groupBy { it.category }
 
     fun getQuantityById(id: String): Quantity<QuantityUnit>? {

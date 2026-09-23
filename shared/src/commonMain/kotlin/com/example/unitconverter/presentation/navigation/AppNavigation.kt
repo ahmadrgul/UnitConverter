@@ -64,15 +64,24 @@ fun AppNavigation() {
                 .consumeWindowInsets(PaddingValues(bottom = innerPadding.calculateBottomPadding()))
                 .imePadding()
         ) {
-            homeScreen(onNavigateToConverter = {
-                navController.navigate(ConverterDestination(it))
+            homeScreen(onNavigateToConverter = { quantityId, unitName ->
+                navController.navigate(ConverterDestination(
+                    quantityId = quantityId,
+                    fromUnitName = unitName
+
+                ))
             })
 
             converterScreen(onNavigateBack = {
                 navController.popBackStack()
             })
 
-            historyScreen()
+            historyScreen(onNavigateToConverter = { quantityId, historyId ->
+                navController.navigate(ConverterDestination(
+                    quantityId = quantityId,
+                    historyId = historyId
+                ))
+            })
             settingsScreen()
         }
     }

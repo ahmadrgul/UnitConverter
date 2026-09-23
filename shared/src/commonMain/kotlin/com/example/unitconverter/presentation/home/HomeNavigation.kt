@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
 object HomeDestination : BottomBarRoute
 
 
-fun NavGraphBuilder.homeScreen(onNavigateToConverter: (String) -> Unit) {
+fun NavGraphBuilder.homeScreen(onNavigateToConverter: (String, String?) -> Unit) {
     composable<HomeDestination> { HomeRoute(onNavigateToConverter) }
 }

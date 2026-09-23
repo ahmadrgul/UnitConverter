@@ -56,7 +56,9 @@ import com.example.unitconverter.presentation.history.components.QuantitiesFilte
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun HistoryRoute() {
+fun HistoryRoute(
+    onNavigateToConverter: (String, Long) -> Unit
+) {
     val viewModel: HistoryViewModel = koinViewModel()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -67,7 +69,8 @@ fun HistoryRoute() {
         onDeleteItem = { viewModel.deleteHistoryItem(it) },
         onToggleStarred = { id, isStarred -> viewModel.toggleStarred(id, isStarred) },
         onSelectQuantity = { viewModel.setSelectedQuantity(it) },
-        onCopyHistoryItem = { viewModel.copyHistoryItem(it) }
+        onCopyHistoryItem = { viewModel.copyHistoryItem(it) },
+        onNavigateToConverter = onNavigateToConverter
     )
 }
 
@@ -78,7 +81,8 @@ fun HistoryScreen(
     onDeleteItem: (Long) -> Unit,
     onToggleStarred: (Long, Boolean) -> Unit,
     onSelectQuantity: (String) -> Unit,
-    onCopyHistoryItem: (Long) -> Unit
+    onCopyHistoryItem: (Long) -> Unit,
+    onNavigateToConverter: (String, Long) -> Unit
 ) {
     var isClearDialogVisible by remember { mutableStateOf(false) }
 
@@ -109,6 +113,7 @@ fun HistoryScreen(
                         onDeleteItem = onDeleteItem,
                         onToggleStarred = onToggleStarred,
                         onCopyHistoryItem = onCopyHistoryItem,
+                        onNavigateToConverter = onNavigateToConverter
                     )
                 }
             }

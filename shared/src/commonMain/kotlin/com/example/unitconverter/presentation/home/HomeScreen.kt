@@ -1,6 +1,7 @@
 package com.example.unitconverter.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import com.example.unitconverter.presentation.theme.getQuantityIcon
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -60,7 +62,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HomeRoute(
-    onNavigateToQuantity: (String) -> Unit
+    onNavigateToQuantity: (String, String?) -> Unit
 ) {
     val viewModel: HomeViewModel = koinViewModel()
 
@@ -80,7 +82,7 @@ fun HomeScreen(
     state: HomeState,
     isDarkTheme: Boolean,
     onSearchQueryChange: (String) -> Unit,
-    onNavigateToQuantity: (String) -> Unit
+    onNavigateToQuantity: (String, String?) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -107,7 +109,8 @@ fun HomeScreen(
             if (isSearchFocused) {
                 SearchResults(
                     isQueryEmpty = state.searchQuery.isEmpty(),
-                    searchedUnits = state.searchedUnits
+                    searchedUnits = state.searchedUnits,
+                    onNavigateToUnit = { quantityId, unitName -> onNavigateToQuantity(quantityId, unitName) }
                 )
 
             } else {
@@ -137,7 +140,7 @@ fun HomeScreen(
                                     icon = getQuantityIcon(item.id),
                                     color = getQuantityColor(index),
                                     isDarkTheme = isDarkTheme,
-                                    onClick = { onNavigateToQuantity(item.id) })
+                                    onClick = { onNavigateToQuantity(item.id, null) })
                             }
 
                             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -167,7 +170,8 @@ fun SectionHeading(
 @Composable
 fun SearchResults(
     isQueryEmpty: Boolean,
-    searchedUnits: Map<String, List<SearchedUnitItem>>
+    searchedUnits: Map<String, List<SearchedUnitItem>>,
+    onNavigateToUnit: (String, String) -> Unit,
 ){
     LazyColumn(
         modifier = Modifier
@@ -201,6 +205,8 @@ fun SearchResults(
                             color = MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(12.dp)
                         )
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable(onClick = {onNavigateToUnit(item.quantityId, item.unitName)})
                         .padding(16.dp),
 
                     horizontalArrangement = Arrangement.SpaceBetween

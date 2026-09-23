@@ -31,7 +31,8 @@ val appModule = module {
             convertUnit = get(),
             clipboardService = get(),
             favouritesRepository = get(),
-            historyRepository = get()
+            historyRepository = get(),
+            settingsRepository = get()
         )
     }
 

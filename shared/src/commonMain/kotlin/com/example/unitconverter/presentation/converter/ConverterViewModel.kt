@@ -7,12 +7,18 @@ import com.example.unitconverter.domain.model.quantity.QuantityRegistry
 import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 import com.example.unitconverter.domain.repository.FavouritesRepository
 import com.example.unitconverter.domain.repository.HistoryRepository
+import com.example.unitconverter.domain.repository.SettingsRepository
 import com.example.unitconverter.domain.usecase.ConvertUnitUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.pow
 import kotlin.math.round
 import kotlin.time.Clock
 
@@ -34,10 +40,29 @@ class ConverterViewModel(
     private val convertUnit: ConvertUnitUseCase,
     private val clipboardService: ClipboardService,
     private val favouritesRepository: FavouritesRepository,
-    private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
     private val quantity = QuantityRegistry.getQuantityById(quantityId)
         ?: throw IllegalArgumentException("Unknown quantity ID: '$quantityId'")
+
+    private val historyEnabled = settingsRepository.settings
+        .map { it.saveHistory }
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = false
+        )
+
+    private val precision = settingsRepository.settings
+        .map { it.decimalPrecision }
+        .distinctUntilChanged()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 2
+        )
 
     private val _state = MutableStateFlow(
         ConverterState(
@@ -173,26 +198,33 @@ class ConverterViewModel(
         val numOutput =
             convertUnit(numInput, currentState.selectedFromUnit, currentState.selectedToUnit)
 
+        val resolvedOutput = round(numOutput * (10.0).pow(precision.value).toInt()) / (10.0).pow(precision.value)
+
+        println("${precision.value}: ${(10.0).pow(precision.value).toInt()}: $numOutput -> $resolvedOutput")
+
         val roundedInput = round(numInput * 100) / 100.0
         val roundedOutput = round(numOutput * 100) / 100.0
 
         _state.update {
             it.copy(
-                convertedValue = numOutput.toString(),
+                convertedValue = resolvedOutput.toString(),
                 approximateInputValue = roundedInput.toString(),
                 approximateConvertedValue = roundedOutput.toString()
             )
         }
 
-        viewModelScope.launch {
-            historyRepository.insertHistory(
-                quantity.id,
-                _state.value.selectedFromUnit.unitName,
-                _state.value.selectedToUnit.unitName,
-                roundedInput,
-                roundedOutput,
-                Clock.System.now().toEpochMilliseconds(),
-            )
+        if (historyEnabled.value) {
+            viewModelScope.launch {
+                historyRepository.insertHistory(
+                    quantity.id,
+                    _state.value.selectedFromUnit.unitName,
+                    _state.value.selectedToUnit.unitName,
+                    roundedInput,
+                    resolvedOutput,
+                    Clock.System.now().toEpochMilliseconds(),
+                )
+            }
         }
+
     }
 }

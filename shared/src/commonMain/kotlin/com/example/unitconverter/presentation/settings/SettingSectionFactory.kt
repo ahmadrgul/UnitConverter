@@ -22,6 +22,7 @@ fun AppSettings.toSections(): List<SettingsSectionUi> = listOf(
             SettingsItemUi.Choice(
                 id = SettingId.LANGUAGE,
                 title = "Language",
+                subtitle = "Set app language",
                 options = AppLanguage.entries.map { ChoiceOption(label = it.nativeName, value = it.tag) },
                 currentValue = language.nativeName
             ),
@@ -79,6 +80,7 @@ fun AppSettings.toSections(): List<SettingsSectionUi> = listOf(
             SettingsItemUi.ExternalLink(
                 id = SettingId.ABOUT,
                 title = "About Unit Converter",
+                subtitle = "Version 1.0.0",
                 url = "https://webscare.com"
             )
         )

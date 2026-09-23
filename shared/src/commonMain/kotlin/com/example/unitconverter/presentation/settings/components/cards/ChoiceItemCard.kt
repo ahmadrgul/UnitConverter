@@ -17,6 +17,8 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.unitconverter.generated.resources.Res
+import com.example.unitconverter.generated.resources.check_icon
 import com.example.unitconverter.generated.resources.chevron_down_icon
 import com.example.unitconverter.generated.resources.chevron_right_icon
 import com.example.unitconverter.presentation.settings.model.ChoiceOption
@@ -166,7 +169,26 @@ fun CustomChoice(
     ) {
         options.forEach { option ->
             DropdownMenuItem(
-                text = { Text(option.label) },
+                text = {
+                    Text(
+                        text = option.label,
+                        fontWeight = if (option.label == currentValue) FontWeight.Bold else FontWeight.Normal
+                    )
+                },
+                trailingIcon = {
+                    if (option.label == currentValue) {
+                        Icon(
+                            painter = painterResource(Res.drawable.check_icon),
+                            contentDescription = "Check",
+                            tint = MaterialTheme.colorScheme.onSurface.copy(0.5f),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                },
+                enabled = currentValue != option.label,
+                colors = MenuDefaults.itemColors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                ),
                 onClick = {
                     onChoiceSelect(option.value)
                     isDropDownVisible = false

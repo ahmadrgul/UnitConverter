@@ -33,7 +33,10 @@ fun HistoryItemsList(
                 modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
             ) }
 
-            itemsIndexed(items[day] ?: emptyList()) { index, item ->
+            itemsIndexed(
+                items = items[day] ?: emptyList(),
+                key = { idx, item -> item.dbId }
+            ) { index, item ->
                 HistoryItemCard(
                     quantityName = item.quantityName,
                     quantityId = item.quantityId,
@@ -44,6 +47,7 @@ fun HistoryItemsList(
                     color = getQuantityColor(index),
                     isStarred = item.isStarred,
                     timestamp = "${if (day != "Today") "${item.timestamp.day}," else ""} ${item.timestamp.time}",
+                    modifier = Modifier.animateItem(),
                     onDelete = { onDeleteItem(item.dbId) },
                     onStarred = { onToggleStarred(item.dbId, item.isStarred) },
                     onCopy = { onCopyHistoryItem(item.dbId) },

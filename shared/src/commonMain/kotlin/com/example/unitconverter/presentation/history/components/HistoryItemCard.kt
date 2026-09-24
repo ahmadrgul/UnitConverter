@@ -67,6 +67,7 @@ fun HistoryItemCard(
     isStarred: Boolean,
     color: Color,
     timestamp: String,
+    modifier: Modifier,
     onDelete: () -> Unit,
     onStarred: () -> Unit,
     onCopy: () -> Unit,
@@ -83,7 +84,7 @@ fun HistoryItemCard(
     )
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
             .clickable(

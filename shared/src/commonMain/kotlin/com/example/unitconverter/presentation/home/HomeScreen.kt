@@ -197,9 +197,14 @@ fun SearchResults(
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            itemsIndexed(it.value) { index, item ->
+
+            itemsIndexed(
+                items = it.value,
+                key = { _, item -> item.unitName }
+            ) { index, item ->
                 Row (
                     modifier = Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .height(IntrinsicSize.Min)
                         .dropShadow(

@@ -15,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +30,8 @@ fun QuantitiesFilterBar(
     val scrollState = rememberScrollState()
     val options = remember(quantities) { listOf("" to "All") + quantities.map { it to it } }
 
+    val haptic = LocalHapticFeedback.current
+
     Row(
         modifier = Modifier
             .horizontalScroll(scrollState)
@@ -39,7 +43,10 @@ fun QuantitiesFilterBar(
 
             FilterChip(
                 selected = isSelected,
-                onClick = { onSelectQuantity(value) },
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                    onSelectQuantity(value)
+                },
                 label = { Text(text = label, fontWeight = FontWeight.SemiBold, fontSize = 14.sp) },
                 shape = CircleShape,
                 colors = FilterChipDefaults.filterChipColors(

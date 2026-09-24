@@ -37,6 +37,8 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
@@ -73,6 +75,8 @@ fun HistoryItemCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
+    val haptic = LocalHapticFeedback.current
+
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1f,
         label = "Bounce Animation"
@@ -83,7 +87,10 @@ fun HistoryItemCard(
             .fillMaxWidth()
             .padding(vertical = 6.dp)
             .clickable(
-                onClick = onClick,
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.ContextClick)
+                    onClick()
+                },
                 interactionSource = interactionSource,
                 indication = null
             )

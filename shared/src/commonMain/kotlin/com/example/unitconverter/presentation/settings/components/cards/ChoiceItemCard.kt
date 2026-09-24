@@ -28,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +44,6 @@ import com.example.unitconverter.presentation.theme.getSettingsItemIcon
 import com.example.unitconverter.presentation.theme.getSettingsItemIconColor
 import okio.Options
 import org.jetbrains.compose.resources.painterResource
-
 
 @Composable
 fun ChoiceSettingsItemCard(
@@ -124,6 +125,8 @@ fun CustomChoice(
     options: List<ChoiceOption>,
     onChoiceSelect: (String) -> Unit,
 ){
+    val haptic = LocalHapticFeedback.current
+
     var isDropDownVisible by remember { mutableStateOf(false) }
 
     Row(
@@ -190,6 +193,7 @@ fun CustomChoice(
                     disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(0.5f)
                 ),
                 onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                     onChoiceSelect(option.value)
                     isDropDownVisible = false
                 }

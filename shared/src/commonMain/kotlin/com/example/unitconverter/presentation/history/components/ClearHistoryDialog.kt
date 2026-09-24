@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -91,12 +93,17 @@ fun ClearHistoryDialog(
 
             Spacer(modifier = Modifier.height(28.dp))
 
+            val haptic = LocalHapticFeedback.current
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
-                    onClick = onDismiss,
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+                        onDismiss()
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Gray.copy(0.05f),
@@ -114,6 +121,7 @@ fun ClearHistoryDialog(
 
                 Button(
                     onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                         onClearHistory()
                         onDismiss()
                     },

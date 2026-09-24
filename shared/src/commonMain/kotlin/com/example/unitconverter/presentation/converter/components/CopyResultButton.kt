@@ -35,6 +35,8 @@ import org.jetbrains.compose.resources.painterResource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import com.example.unitconverter.generated.resources.check_icon
 import com.example.unitconverter.generated.resources.clipboard_check_icon
 import com.example.unitconverter.generated.resources.clipboard_icon
@@ -55,9 +57,12 @@ fun CopyResultButton(
         }
     }
 
+    val haptic = LocalHapticFeedback.current
+
     Button(
         onClick = {
             onCopyResults()
+            haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             isCopied = true
         },
         enabled = result.isNotEmpty(),

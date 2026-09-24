@@ -32,6 +32,8 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -215,6 +217,8 @@ fun SwapButton(
     modifier: Modifier = Modifier,
     onSwap: () -> Unit,
 ) {
+    val haptic = LocalHapticFeedback.current
+
     var isFlipped by remember { mutableStateOf(false) }
 
     val rotation by animateFloatAsState(
@@ -224,6 +228,8 @@ fun SwapButton(
 
     IconButton(
         onClick = {
+            val performed = haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+
             onSwap()
             isFlipped = !isFlipped
         },

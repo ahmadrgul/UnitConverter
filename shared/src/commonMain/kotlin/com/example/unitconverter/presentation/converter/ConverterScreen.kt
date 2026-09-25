@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -104,85 +106,11 @@ fun ConverterScreen(
                 onFavAction = onToggleFav,
                 onNavigateBack = onNavigateBack,
             )
-        }
-    ) { innerPadding ->
-        Box {
-            Column(
-                modifier = Modifier
-                    .padding(top = innerPadding.calculateTopPadding())
-                    .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-
-                Box {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        ConversionCard(
-                            label = "From",
-                            value = state.inputValue,
-                            approximateValue = state.approximateInputValue,
-                            editable = false,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            unit = state.selectedFromUnit,
-                            onUnitClick = { showInputUnitSheet = true },
-                            onValueChange = { }
-                        ) { innerTextField ->
-                            Box(contentAlignment = Alignment.CenterStart) {
-                                if (state.inputValue.isEmpty()) {
-                                    Text(
-                                        text = "Enter Value",
-                                        color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
-                                        maxLines = 1,
-                                        fontSize = 32.sp,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
-
-                        ConversionCard(
-                            label = "To",
-                            value = state.convertedValue,
-                            approximateValue = state.approximateConvertedValue,
-                            editable = false,
-                            color = MaterialTheme.colorScheme.primary,
-                            unit = state.selectedToUnit,
-                            onUnitClick = { showOutputUnitSheet = true },
-                            onValueChange = {},
-                        ) { innerTextField ->
-                            Box(contentAlignment = Alignment.CenterStart) {
-                                if (state.convertedValue.isEmpty()) {
-                                    Text(
-                                        text = "–",
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        maxLines = 1,
-                                        fontSize = 32.sp,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
-                    }
-
-                    SwapButton(
-                        onSwap = onUnitsSwap,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-
-                CopyResultButton(
-                    result = state.convertedValue,
-                    onCopyResults = onCopyResults,
-                )
-            }
-
+        },
+        bottomBar = {
             AnimatedVisibility(
                 visible = showKeyBoard,
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 40.dp),
+                modifier = Modifier.padding(bottom = 40.dp),
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
@@ -191,6 +119,82 @@ fun ConverterScreen(
                     onKeyPressed = onKeyPressed
                 )
             }
+        }
+    ) { innerPadding ->
+
+        val scrollState = rememberScrollState()
+
+        Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Box {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ConversionCard(
+                        label = "From",
+                        value = state.inputValue,
+                        approximateValue = state.approximateInputValue,
+                        editable = false,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        unit = state.selectedFromUnit,
+                        onUnitClick = { showInputUnitSheet = true },
+                        onValueChange = { }
+                    ) { innerTextField ->
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if (state.inputValue.isEmpty()) {
+                                Text(
+                                    text = "Enter Value",
+                                    color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
+                                    maxLines = 1,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+
+                    ConversionCard(
+                        label = "To",
+                        value = state.convertedValue,
+                        approximateValue = state.approximateConvertedValue,
+                        editable = false,
+                        color = MaterialTheme.colorScheme.primary,
+                        unit = state.selectedToUnit,
+                        onUnitClick = { showOutputUnitSheet = true },
+                        onValueChange = {},
+                    ) { innerTextField ->
+                        Box(contentAlignment = Alignment.CenterStart) {
+                            if (state.convertedValue.isEmpty()) {
+                                Text(
+                                    text = "–",
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    maxLines = 1,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                }
+
+                SwapButton(
+                    onSwap = onUnitsSwap,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            CopyResultButton(
+                result = state.convertedValue,
+                onCopyResults = onCopyResults,
+            )
         }
 
         UnitsBottomSheet(
@@ -228,8 +232,7 @@ fun SwapButton(
 
     IconButton(
         onClick = {
-            val performed = haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-
+            haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             onSwap()
             isFlipped = !isFlipped
         },

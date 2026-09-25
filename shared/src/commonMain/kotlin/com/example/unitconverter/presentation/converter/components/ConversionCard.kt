@@ -111,10 +111,12 @@ fun ConversionCard(
                     indication = null,
                     onClick = onUnitClick
                 ),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                val unitDisplay = if ("${unit.unitName} (${unit.symbol})".length <= 18 ) "${unit.unitName} (${unit.symbol})" else "(${unit.symbol})"
+
                 Text(
-                    text = "${unit.unitName} (${unit.symbol})",
+                    text = unitDisplay,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
                 )

@@ -36,7 +36,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,24 +75,27 @@ fun ConverterRoute(
         state = state,
         onToggleFav = { viewModel.onToggleFavourite() },
         onKeyPressed = { viewModel.onKeyPressed(it) },
+        onCursorMoved = { viewModel.onCursorMoved(it) },
         onFromUnitChange = { viewModel.onFromUnitChange(it) },
         onToUnitChange = { viewModel.onToUnitChange(it) },
         onUnitsSwap = { viewModel.onUnitsSwap() },
         onCopyResults = { viewModel.onCopyResults() },
-        onNavigateBack = onNavigateBack
+        onNavigateBack = onNavigateBack,
+        updateInputValue = { viewModel.setInputValue(it) }
     )
 }
-
 @Composable
 fun ConverterScreen(
     state: ConverterState,
     onToggleFav: () -> Unit,
     onKeyPressed: (KeyboardKey) -> Unit,
+    onCursorMoved: (Int) -> Unit,
     onFromUnitChange: (QuantityUnit) -> Unit,
     onToUnitChange: (QuantityUnit) -> Unit,
     onUnitsSwap: () -> Unit,
     onCopyResults: () -> Unit,
     onNavigateBack: () -> Unit,
+    updateInputValue: (String) -> Unit,
 ) {
     var showInputUnitSheet by remember { mutableStateOf(false) }
     var showOutputUnitSheet by remember { mutableStateOf(false) }
@@ -110,7 +115,7 @@ fun ConverterScreen(
         bottomBar = {
             AnimatedVisibility(
                 visible = showKeyBoard,
-                modifier = Modifier.padding(bottom = 40.dp),
+//                modifier = Modifier.padding(bottom = 40.dp),
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
             ) {
@@ -128,7 +133,8 @@ fun ConverterScreen(
             modifier = Modifier
                 .verticalScroll(scrollState)
                 .padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding())
-                .padding(16.dp)
+                .padding(top = 16.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
@@ -136,11 +142,17 @@ fun ConverterScreen(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    val inputTextFieldValue = TextFieldValue(
+                        text = state.inputValue,
+                        selection = TextRange(state.inputCursorIndex)
+                    )
+
                     ConversionCard(
                         label = "From",
-                        value = state.inputValue,
+                        value = inputTextFieldValue,
+                        autoFocused = true,
                         approximateValue = state.approximateInputValue,
-                        editable = false,
+                        editable = true,
                         color = MaterialTheme.colorScheme.onSurface,
                         unit = state.selectedFromUnit,
                         onUnitClick = { showInputUnitSheet = true },
@@ -162,13 +174,13 @@ fun ConverterScreen(
 
                     ConversionCard(
                         label = "To",
-                        value = state.convertedValue,
+                        value = TextFieldValue(state.convertedValue),
                         approximateValue = state.approximateConvertedValue,
                         editable = false,
                         color = MaterialTheme.colorScheme.primary,
                         unit = state.selectedToUnit,
                         onUnitClick = { showOutputUnitSheet = true },
-                        onValueChange = {},
+                        onValueChange = { },
                     ) { innerTextField ->
                         Box(contentAlignment = Alignment.CenterStart) {
                             if (state.convertedValue.isEmpty()) {
@@ -232,7 +244,8 @@ fun SwapButton(
 
     IconButton(
         onClick = {
-            haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+            val performed = haptic.performHapticFeedback(HapticFeedbackType.Confirm)
+
             onSwap()
             isFlipped = !isFlipped
         },

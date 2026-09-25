@@ -6,6 +6,7 @@ import com.example.unitconverter.domain.model.quantity.unit.QuantityUnit
 data class ConverterState(
     val isFavourite: Boolean = false,
     val inputValue: String = "",
+    val inputCursorIndex: Int = 0,
     val approximateInputValue: String = "",
     val currentQuantity: Quantity<QuantityUnit>,
     val selectedFromUnit: QuantityUnit,

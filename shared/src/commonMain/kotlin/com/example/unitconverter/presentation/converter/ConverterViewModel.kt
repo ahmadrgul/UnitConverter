@@ -108,50 +108,6 @@ class ConverterViewModel(
         }
     }
 
-    private fun removeLastCharacter() {
-        _state.update { it.copy(inputValue = _state.value.inputValue.dropLast(1)) }
-    }
-
-    private fun clearAll() {
-        _state.update {
-            it.copy(
-                inputValue = "",
-                convertedValue = "",
-                approximateInputValue = "",
-                approximateConvertedValue = ""
-            )
-        }
-    }
-
-    private fun appendDot() {
-        if (_state.value.inputValue.contains(".")) return
-
-        if (_state.value.inputValue.isEmpty()) {
-            _state.update { it.copy(inputValue = _state.value.inputValue.plus("0.")) }
-            return
-        }
-
-        _state.update { it.copy(inputValue = _state.value.inputValue.plus(".")) }
-    }
-
-    private fun appendNumber(key: KeyboardKey) {
-        if (key == KeyboardKey.NUM_0 && _state.value.inputValue == "0") return
-        _state.update { it.copy(inputValue = _state.value.inputValue.plus(key.symbol)) }
-    }
-
-    fun onKeyPressed(key: KeyboardKey) {
-        when (key) {
-            KeyboardKey.BACKSPACE -> removeLastCharacter()
-            KeyboardKey.AC -> clearAll()
-            KeyboardKey.DOT -> appendDot()
-            KeyboardKey.EQUAL -> {
-                performConversionFromCurrInput()
-                saveCurrToHistory()
-            }
-            else -> appendNumber(key)
-        }
-    }
-
     fun onFromUnitChange(newFromUnit: QuantityUnit) {
         _state.update { it.copy(selectedFromUnit = newFromUnit) }
         performConversionFromCurrInput()
@@ -233,5 +189,95 @@ class ConverterViewModel(
                 approximateConvertedValue = roundedOutput.toString()
             )
         }
+    }
+
+    private fun removeCharacterAtCurrCursor() {
+        val currInputText = _state.value.inputValue
+        val currCursorIndex = _state.value.inputCursorIndex
+
+        if (currCursorIndex <= 0) {
+            return
+        }
+
+        val beforeCursorText = currInputText.substring(0, currCursorIndex)
+        val afterCursorText = currInputText.substring(currCursorIndex)
+
+        _state.update { it.copy(
+            inputValue = beforeCursorText.dropLast(1) + afterCursorText,
+            inputCursorIndex = currCursorIndex - 1
+        ) }
+    }
+
+    private fun clearAll() {
+        _state.update {
+            it.copy(
+                inputValue = "",
+                convertedValue = "",
+                approximateInputValue = "",
+                approximateConvertedValue = "",
+                inputCursorIndex = 0
+            )
+        }
+    }
+
+    private fun insertPointAtCurrCursor() {
+        if (_state.value.inputValue.contains(".")) return
+
+        if (_state.value.inputValue.isEmpty()) {
+            _state.update { it.copy(
+                inputValue = _state.value.inputValue.plus("0."),
+                inputCursorIndex = 2
+            ) }
+            return
+        }
+
+        val currInputText = _state.value.inputValue
+        val currCursorIndex = _state.value.inputCursorIndex
+
+        val beforeCursorText = currInputText.substring(0, currCursorIndex)
+        val afterCursorText = currInputText.substring(currCursorIndex)
+
+        _state.update { it.copy(
+            inputValue = "$beforeCursorText.$afterCursorText",
+            inputCursorIndex = currCursorIndex + 1
+        ) }
+    }
+
+    private fun insertNumberAtCurrCursor(key: KeyboardKey) {
+        if (key == KeyboardKey.NUM_0 && _state.value.inputValue == "0") return
+
+        val currInputText = _state.value.inputValue
+        val currCursorIndex = _state.value.inputCursorIndex
+
+        val beforeCursorText = currInputText.substring(0, currCursorIndex)
+        val afterCursorText = currInputText.substring(currCursorIndex)
+
+        _state.update { it.copy(
+            inputValue = beforeCursorText + key.symbol + afterCursorText,
+            inputCursorIndex = currCursorIndex + 1
+        ) }
+    }
+
+    fun onCursorMoved(newIndex: Int) {
+        _state.update { it.copy(inputCursorIndex = newIndex) }
+    }
+
+    fun onKeyPressed(key: KeyboardKey) {
+        when (key) {
+            KeyboardKey.BACKSPACE -> removeCharacterAtCurrCursor()
+            KeyboardKey.AC -> clearAll()
+            KeyboardKey.DOT -> insertPointAtCurrCursor()
+            KeyboardKey.EQUAL -> {
+                performConversionFromCurrInput()
+                saveCurrToHistory()
+            }
+            else ->  insertNumberAtCurrCursor(key)
+        }
+    }
+
+    fun setInputValue(value: String) {
+        _state.update { it.copy(
+            inputValue = value,
+        ) }
     }
 }
